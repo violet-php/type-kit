@@ -13,6 +13,15 @@ use Violet\TypeKit\Exception\TypeException;
  */
 class Type
 {
+    public static function bool(mixed $value): bool
+    {
+        if (\is_bool($value)) {
+            return $value;
+        }
+
+        throw TypeException::createFromValue($value, 'bool');
+    }
+
     public static function int(mixed $value): int
     {
         if (\is_int($value)) {

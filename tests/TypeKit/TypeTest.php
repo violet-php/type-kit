@@ -15,6 +15,17 @@ use Violet\TypeKit\Type;
  */
 class TypeTest extends TestCase
 {
+    public function testBoolType(): void
+    {
+        $this->assertTrue(Type::bool(true));
+    }
+
+    public function testInvalidBoolType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::bool(1);
+    }
+
     public function testIntType(): void
     {
         $this->assertSame(1, Type::int(1));
