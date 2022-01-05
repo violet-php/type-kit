@@ -1,0 +1,9 @@
+parameters:
+    level: 9
+    paths:
+        - .
+    excludePaths:
+        - vendor/*
+
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
