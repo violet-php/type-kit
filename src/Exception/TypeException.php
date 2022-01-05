@@ -45,13 +45,12 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
             }
         }
 
-        $index = max($index - 1, 0);
-
-        while ($trace[$index]->file === null || $trace[$index]->line === null) {
-            $index++;
+        foreach (\array_slice($trace, $index - 1) as $entry) {
+            if ($entry->file !== null && $entry->line !== null) {
+                $this->file = $entry->file;
+                $this->line = $entry->line;
+                break;
+            }
         }
-
-        $this->file = $trace[$index]->file;
-        $this->line = $trace[$index]->line;
     }
 }

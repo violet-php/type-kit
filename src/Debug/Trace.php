@@ -44,9 +44,9 @@ class Trace
      */
     public static function getBacktrace(int $options = 0, int $depth = 0): array
     {
-        return array_values(array_map(
+        return array_map(
             static fn (array $entry) => new self($entry),
             debug_backtrace($options, $depth)
-        ));
+        );
     }
 }
