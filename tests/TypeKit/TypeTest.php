@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TypeKit;
+namespace Violet\TypeKit;
 
 use PHPUnit\Framework\TestCase;
 use Violet\TypeKit\Exception\TypeException;
-use Violet\TypeKit\Type;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
