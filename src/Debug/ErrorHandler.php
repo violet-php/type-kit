@@ -15,7 +15,7 @@ class ErrorHandler
 {
     public static function handleCall(\Closure $callback): mixed
     {
-        set_error_handler([self::class, 'throwErrorException']);
+        set_error_handler(self::throwErrorException(...));
 
         try {
             return $callback();

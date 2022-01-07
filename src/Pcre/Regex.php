@@ -15,12 +15,12 @@ use Violet\TypeKit\Exception\PcreException;
  */
 class Regex
 {
-    private readonly string $regex;
+    public readonly string $regex;
 
     public function __construct(string $regex)
     {
-        $this->call(static fn () => preg_match($regex, ''));
         $this->regex = $regex;
+        $this->call(fn () => preg_match($this->regex, ''));
     }
 
     public function match(string $subject, int $offset = 0): ?array
@@ -37,7 +37,7 @@ class Regex
         return array_filter($matches, static fn ($value) => \is_string($value));
     }
 
-    public function matchOffsets(string $subject, int $offset = 0): ?array
+    public function matchOffset(string $subject, int $offset = 0): ?array
     {
         $matches = [];
         $count = $this->call(function () use ($subject, $offset, &$matches) {
@@ -49,11 +49,6 @@ class Regex
         }
 
         return array_filter($matches, static fn (array $value) => \is_string($value[0]));
-    }
-
-    public function matches(string $subject, int $offset = 0): bool
-    {
-        return $this->call(fn () => preg_match($this->regex, $subject, offset: $offset)) === 1;
     }
 
     public function matchAll(string $subject, int $offset = 0): array
@@ -68,7 +63,7 @@ class Regex
         }
 
         return array_map(
-            static fn ($set) => array_filter($matches, static fn ($value) => \is_string($value)),
+            static fn ($set) => array_filter($set, static fn ($value) => \is_string($value)),
             $matches
         );
     }
@@ -91,9 +86,14 @@ class Regex
         }
 
         return array_map(
-            static fn ($set) => array_filter($matches, static fn ($value) => \is_string($value[0])),
+            static fn ($set) => array_filter($set, static fn ($value) => \is_string($value[0])),
             $matches
         );
+    }
+
+    public function matches(string $subject, int $offset = 0): bool
+    {
+        return $this->call(fn () => preg_match($this->regex, $subject, offset: $offset)) === 1;
     }
 
     public function replace(string $replacement, string $subject, int $limit = -1): string

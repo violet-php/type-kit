@@ -26,7 +26,7 @@ class TypeExceptionTest extends TestCase
     public function testFileAndLineViaInternalCall(): void
     {
         $line = __LINE__ + 1;
-        $result = \call_user_func('array_map', [TypeException::class, 'createFromValue'], [1], ['string']);
+        $result = \call_user_func(array_map(...), TypeException::createFromValue(...), [1], ['string']);
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey(0, $result);

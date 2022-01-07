@@ -11,5 +11,4 @@ namespace Violet\TypeKit\Exception;
  */
 class PcreException extends \RuntimeException implements TypeKitException
 {
-
 }
