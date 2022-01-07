@@ -31,6 +31,15 @@ class Type
         throw TypeException::createFromValue($value, 'int');
     }
 
+    public static function float(mixed $value): float
+    {
+        if (\is_float($value)) {
+            return $value;
+        }
+
+        throw TypeException::createFromValue($value, 'float');
+    }
+
     public static function string(mixed $value): string
     {
         if (\is_string($value)) {
@@ -38,6 +47,38 @@ class Type
         }
 
         throw TypeException::createFromValue($value, 'string');
+    }
+
+    /**
+     * @param mixed $value
+     * @return array<mixed>
+     */
+    public static function array(mixed $value): array
+    {
+        if (\is_array($value)) {
+            return $value;
+        }
+
+        throw TypeException::createFromValue($value, 'array');
+    }
+
+    /**
+     * @param mixed $value
+     * @return array<string>
+     */
+    public static function stringArray(mixed $value): array
+    {
+        if (\is_array($value)) {
+            foreach ($value as $item) {
+                if (!\is_string($item)) {
+                    throw TypeException::createFromValue($value, 'array<string>');
+                }
+            }
+
+            return $value;
+        }
+
+        throw TypeException::createFromValue($value, 'array<string>');
     }
 
     /**
@@ -51,6 +92,25 @@ class Type
         }
 
         throw TypeException::createFromValue($value, 'list');
+    }
+
+    /**
+     * @param mixed $value
+     * @return list<string>
+     */
+    public static function stringList(mixed $value): array
+    {
+        if (\is_array($value) && array_is_list($value)) {
+            foreach ($value as $item) {
+                if (!\is_string($item)) {
+                    throw TypeException::createFromValue($value, 'list<string>');
+                }
+            }
+
+            return $value;
+        }
+
+        throw TypeException::createFromValue($value, 'list<string>');
     }
 
     public static function object(mixed $value): object

@@ -13,6 +13,11 @@ use Violet\TypeKit\Exception\ErrorException;
  */
 class ErrorHandler
 {
+    /**
+     * @template T
+     * @param \Closure():T $callback
+     * @return T
+     */
     public static function handleCall(\Closure $callback): mixed
     {
         set_error_handler(self::throwErrorException(...));

@@ -27,13 +27,6 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         $this->overrideLocation();
     }
 
-    public static function createFromValue(mixed $value, string $expectedType): self
-    {
-        return new self(
-            sprintf("Got unexpected value type '%s', was expecting '%s'", get_debug_type($value), $expectedType)
-        );
-    }
-
     private function overrideLocation(): void
     {
         $trace = Trace::getBacktrace();
@@ -52,5 +45,54 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
                 break;
             }
         }
+    }
+
+    public static function createFromValue(mixed $value, string $expectedType): self
+    {
+        return new self(
+            sprintf("Got unexpected value type '%s', was expecting '%s'", self::describeType($value), $expectedType)
+        );
+    }
+
+    private static function describeType(mixed $value): string
+    {
+        return match (true) {
+            $value === null => 'null',
+            \is_bool($value) => 'bool',
+            \is_int($value) => 'int',
+            \is_float($value) => 'float',
+            \is_string($value) => 'string',
+            \is_object($value) => $value::class,
+            \is_array($value) => self::describeArray($value),
+            default => 'resource',
+        };
+    }
+
+    /**
+     * @param array<mixed> $value
+     * @return string
+     */
+    private static function describeArray(array $value): string
+    {
+        $foundTypes = array_fill_keys(['null', 'bool', 'int', 'float', 'string', 'resource', 'array'], false);
+
+        foreach ($value as $item) {
+            $type = match (true) {
+                $item === null => 'null',
+                \is_bool($item) => 'bool',
+                \is_int($item) => 'int',
+                \is_float($item) => 'float',
+                \is_string($item) => 'string',
+                \is_array($item) => 'array',
+                \is_object($item) => $item::class,
+                default => 'resource',
+            };
+
+            $foundTypes[$type] = true;
+        }
+
+        $name = array_is_list($value) ? 'list' : 'array';
+
+        return sprintf('%s<%s>', $name, implode('|', array_keys(array_filter($foundTypes))));
     }
 }

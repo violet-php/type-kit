@@ -36,6 +36,17 @@ class TypeTest extends TestCase
         Type::int(true);
     }
 
+    public function testFloatType(): void
+    {
+        $this->assertSame(1.0, Type::float(1.0));
+    }
+
+    public function testInvalidFloatType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::float(true);
+    }
+
     public function testStringType(): void
     {
         $this->assertSame('foobar', Type::string('foobar'));
@@ -45,6 +56,38 @@ class TypeTest extends TestCase
     {
         $this->expectException(TypeException::class);
         Type::string(true);
+    }
+
+    public function testArrayType(): void
+    {
+        $this->assertSame([], Type::array([]));
+        $this->assertSame([0, 1, 2], Type::array([0, 1, 2]));
+        $this->assertSame(['foo' => 0], Type::array(['foo' => 0]));
+    }
+
+    public function testInvalidArrayType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::array(true);
+    }
+
+    public function testStringArrayType(): void
+    {
+        $this->assertSame([], Type::stringArray([]));
+        $this->assertSame(['a', 'b', 'c'], Type::stringArray(['a', 'b', 'c']));
+        $this->assertSame(['foo' => 'bar'], Type::stringArray(['foo' => 'bar']));
+    }
+
+    public function testInvalidStringArrayType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::stringArray(true);
+    }
+
+    public function testInvalidStringArrayValueType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::stringArray([true]);
     }
 
     public function testListType(): void
@@ -57,6 +100,24 @@ class TypeTest extends TestCase
     {
         $this->expectException(TypeException::class);
         Type::list(['foo' => 0]);
+    }
+
+    public function testStringListType(): void
+    {
+        $this->assertSame([], Type::stringList([]));
+        $this->assertSame(['a', 'b', 'c'], Type::stringList(['a', 'b', 'c']));
+    }
+
+    public function testInvalidStringListType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::stringList(['foo' => 0]);
+    }
+
+    public function testInvalidStringListValueType(): void
+    {
+        $this->expectException(TypeException::class);
+        Type::stringList([0]);
     }
 
     public function testObjectType(): void

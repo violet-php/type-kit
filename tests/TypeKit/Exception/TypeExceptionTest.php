@@ -48,4 +48,38 @@ class TypeExceptionTest extends TestCase
             $this->assertSame($line, $exception->getLine());
         }
     }
+
+    /** @dataProvider getTypeNameTestCases */
+    public function testTypeName(mixed $value, string $type): void
+    {
+        $exception = TypeException::createFromValue($value, $type);
+        $pattern = preg_quote("Got unexpected value type '$type', was expecting '$type'", '/');
+
+        $this->assertMatchesRegularExpression("/$pattern/", $exception->getMessage());
+    }
+
+    /**
+     * @return array<array{mixed, string}>
+     */
+    public function getTypeNameTestCases(): array
+    {
+        return [
+            [null, 'null'],
+            [true, 'bool'],
+            [1, 'int'],
+            [1.0, 'float'],
+            ['foobar', 'string'],
+            [tmpfile(), 'resource'],
+            [new \DateTimeImmutable(), \DateTimeImmutable::class],
+            [[null], 'list<null>'],
+            [[true], 'list<bool>'],
+            [[1], 'list<int>'],
+            [[1.0], 'list<float>'],
+            [['foobar'], 'list<string>'],
+            [[tmpfile()], 'list<resource>'],
+            [[new \DateTimeImmutable()], 'list<' . \DateTimeImmutable::class . '>'],
+            [[[]], 'list<array>'],
+            [[1 => 1], 'array<int>'],
+        ];
+    }
 }
