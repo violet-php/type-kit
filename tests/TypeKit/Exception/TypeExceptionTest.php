@@ -29,7 +29,6 @@ class TypeExceptionTest extends TestCase
         $result = \call_user_func(array_map(...), TypeException::createFromValue(...), [1], ['string']);
 
         $this->assertIsArray($result);
-        $this->assertArrayHasKey(0, $result);
         $this->assertInstanceOf(TypeException::class, $result[0]);
         $this->assertSame(__FILE__, $result[0]->getFile());
         $this->assertSame($line, $result[0]->getLine());
@@ -69,17 +68,18 @@ class TypeExceptionTest extends TestCase
             [1, 'int'],
             [1.0, 'float'],
             ['foobar', 'string'],
-            [tmpfile(), 'resource'],
+            [tmpfile(), 'resource (stream)'],
             [new \DateTimeImmutable(), \DateTimeImmutable::class],
             [[null], 'list<null>'],
             [[true], 'list<bool>'],
             [[1], 'list<int>'],
             [[1.0], 'list<float>'],
             [['foobar'], 'list<string>'],
-            [[tmpfile()], 'list<resource>'],
+            [[tmpfile()], 'list<resource (stream)>'],
             [[new \DateTimeImmutable()], 'list<' . \DateTimeImmutable::class . '>'],
             [[[]], 'list<array>'],
             [[1 => 1], 'array<int>'],
+            [[1, 'list'], 'list<int|string>'],
         ];
     }
 }

@@ -42,6 +42,17 @@ class RegexTest extends TestCase
         $regex->match('foobar foobar foobar');
     }
 
+    public function testSuccessfulMatch(): void
+    {
+        $regex = new Regex('/foo/');
+        $result = $regex->match('foo');
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey(0, $result);
+        $this->assertSame('foo', (string)$result[0]);
+    }
+
     public function testNoMatchReturnsNull(): void
     {
         $regex = new Regex('/foo/');
@@ -51,14 +62,12 @@ class RegexTest extends TestCase
     public function testMatchReturnsResults(): void
     {
         $regex = new Regex("/f(o)(?'name'o)/");
-        $result = $regex->match('foo');
-
-        $this->assertSame([
-            0 => 'foo',
-            1 => 'o',
-            'name' => 'o',
-            2 => 'o',
-        ], $result);
+        $this->assertMatches([
+            0 => ['foo', 0],
+            1 => ['o', 1],
+            'name' => ['o', 2],
+            2 => ['o', 2],
+        ], $regex->match('foo'));
     }
 
     public function testOffsetNoMatch(): void
@@ -70,91 +79,25 @@ class RegexTest extends TestCase
     public function testNoUnmatchedResults(): void
     {
         $regex = new Regex('/foo(bar)?/');
-        $this->assertSame(['foo'], $regex->match(('foo')));
+        $this->assertMatches([0 => ['foo', 0]], $regex->match('foo'));
     }
 
-    public function testNoMatchOffsetReturnsNull(): void
+    public function testSuccessfulMatchAll(): void
     {
         $regex = new Regex('/foo/');
-        $this->assertNull($regex->matchOffset('bar'));
-    }
-
-    public function testMatchOffsetReturnsResults(): void
-    {
-        $regex = new Regex("/f(o)(?'name'o)/");
-        $result = $regex->matchOffset('foo');
-
-        $this->assertSame([
-            0 => ['foo', 0],
-            1 => ['o', 1],
-            'name' => ['o', 2],
-            2 => ['o', 2],
-        ], $result);
-    }
-
-    public function testOffsetNoMatchOffset(): void
-    {
-        $regex = new Regex('/foo/');
-        $this->assertNull($regex->matchOffset('foo', 1));
-    }
-
-    public function testNoUnmatchedOffsetResults(): void
-    {
-        $regex = new Regex('/foo(bar)?/');
-        $this->assertSame([['foo', 0]], $regex->matchOffset(('foo')));
+        $this->assertCount(2, $regex->matchAll('/foofoo/'));
     }
 
     public function testNoMatchAllReturnsEmptyArray(): void
     {
         $regex = new Regex('/foo/');
-        $this->assertSame([], $regex->matchAll('bar'));
+        $this->assertCount(0, $regex->matchAll('bar'));
     }
 
     public function testMatchAllReturnsResults(): void
     {
         $regex = new Regex("/f(o)(?'name'o)/");
-        $result = $regex->matchAll('foofoo');
-
-        $this->assertSame([
-            [
-                0 => 'foo',
-                1 => 'o',
-                'name' => 'o',
-                2 => 'o',
-            ],
-            [
-                0 => 'foo',
-                1 => 'o',
-                'name' => 'o',
-                2 => 'o',
-            ]
-        ], $result);
-    }
-
-    public function testOffsetNoMatchAll(): void
-    {
-        $regex = new Regex('/foo/');
-        $this->assertSame([], $regex->matchAll('foo', 1));
-    }
-
-    public function testNoUnmatchedAllResults(): void
-    {
-        $regex = new Regex('/foo(bar)?/');
-        $this->assertSame([['foo']], $regex->matchAll('foo'));
-    }
-
-    public function testNoMatchAllOffsetsReturnsEmptyArray(): void
-    {
-        $regex = new Regex('/foo/');
-        $this->assertSame([], $regex->matchAllOffsets('bar'));
-    }
-
-    public function testMatchAllOffsetsReturnsResults(): void
-    {
-        $regex = new Regex("/f(o)(?'name'o)/");
-        $result = $regex->matchAllOffsets('foofoo');
-
-        $this->assertSame([
+        $this->assertAllMatches([
             [
                 0 => ['foo', 0],
                 1 => ['o', 1],
@@ -167,19 +110,19 @@ class RegexTest extends TestCase
                 'name' => ['o', 5],
                 2 => ['o', 5],
             ]
-        ], $result);
+        ], $regex->matchAll('foofoo'));
     }
 
-    public function testOffsetNoMatchAllOffsets(): void
+    public function testOffsetNoMatchAll(): void
     {
         $regex = new Regex('/foo/');
-        $this->assertSame([], $regex->matchAllOffsets('foo', 1));
+        $this->assertCount(0, $regex->matchAll('foo', 1));
     }
 
-    public function testNoUnmatchedAllOffsetsResults(): void
+    public function testNoUnmatchedAllResults(): void
     {
         $regex = new Regex('/foo(bar)?/');
-        $this->assertSame([[['foo', 0]]], $regex->matchAllOffsets('foo'));
+        $this->assertAllMatches([[0 => ['foo', 0]]], $regex->matchAll('foo'));
     }
 
     public function testMatches(): void
@@ -188,6 +131,7 @@ class RegexTest extends TestCase
 
         $this->assertTrue($regex->matches('foo'));
         $this->assertFalse($regex->matches('bar'));
+        $this->assertFalse($regex->matches('foo', 1));
     }
 
     public function testReplace(): void
@@ -206,6 +150,12 @@ class RegexTest extends TestCase
     {
         $regex = new Regex('/foo/');
         $this->assertSame('barfoobarfoo', $regex->replaceCallback(fn ($match) => "bar$match[0]", 'foofoo'));
+    }
+
+    public function testReplaceCallbackLimit(): void
+    {
+        $regex = new Regex('/foo/');
+        $this->assertSame('barfoofoo', $regex->replaceCallback(fn ($match) => "bar$match[0]", 'foofoo', 1));
     }
 
     public function testSplit(): void
@@ -236,5 +186,38 @@ class RegexTest extends TestCase
     {
         $regex = new Regex('_foo_');
         $this->assertSame('foo\\_bar', $regex->quote('foo_bar'));
+    }
+
+    /**
+     * @param array<array{string, int}> $expected
+     * @param ?array<RegexMatch> $actual
+     * @return void
+     */
+    private function assertMatches(array $expected, ?array $actual): void
+    {
+        $this->assertIsArray($actual);
+        $this->assertSame(array_keys($expected), array_keys($actual));
+
+        $actualArray = [];
+
+        foreach ($actual as $match) {
+            $actualArray[$match->name] = [$match->value, $match->offset];
+        }
+
+        $this->assertSame($expected, $actualArray);
+    }
+
+    /**
+     * @param list<array<array{string, int}>> $expected
+     * @param list<array<RegexMatch>> $actual
+     * @return void
+     */
+    private function assertAllMatches(array $expected, array $actual): void
+    {
+        $this->assertSame(array_keys($expected), array_keys($actual));
+
+        foreach ($expected as $key => $expectedMatch) {
+            $this->assertMatches($expectedMatch, $actual[$key]);
+        }
     }
 }

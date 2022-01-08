@@ -27,30 +27,9 @@ class Regex
     /**
      * @param string $subject
      * @param int $offset
-     * @return array<string>|null
+     * @return array<RegexMatch>|null
      */
     public function match(string $subject, int $offset = 0): ?array
-    {
-        [$count, $match] = $this->call(function () use ($subject, $offset) {
-            $match = [];
-            $count = preg_match($this->regex, $subject, $match, PREG_UNMATCHED_AS_NULL, $offset);
-
-            return [$count, $match];
-        });
-
-        if ($count !== 1) {
-            return null;
-        }
-
-        return array_filter($match, \is_string(...));
-    }
-
-    /**
-     * @param string $subject
-     * @param int $offset
-     * @return array<array{string, int}>|null
-     */
-    public function matchOffset(string $subject, int $offset = 0): ?array
     {
         [$count, $match] = $this->call(function () use ($subject, $offset) {
             $match = [];
@@ -63,39 +42,23 @@ class Regex
             return null;
         }
 
-        return array_filter($match, static fn (mixed $value) => \is_string($value[0]));
-    }
+        $result = [];
 
-    /**
-     * @param string $subject
-     * @param int $offset
-     * @return list<array<string>>
-     */
-    public function matchAll(string $subject, int $offset = 0): array
-    {
-        [$count, $match] = $this->call(function () use ($subject, $offset) {
-            $match = [];
-            $count = preg_match_all($this->regex, $subject, $match, PREG_UNMATCHED_AS_NULL | PREG_SET_ORDER, $offset);
-
-            return [$count, $match];
-        });
-
-        if ($count < 1) {
-            return [];
+        foreach ($match as $name => [$value,  $matchOffset]) {
+            if (\is_string($value)) {
+                $result[$name] = new RegexMatch($name, $value, $matchOffset);
+            }
         }
 
-        return array_map(
-            static fn (array $set) => array_filter($set, \is_string(...)),
-            $match
-        );
+        return $result;
     }
 
     /**
      * @param string $subject
      * @param int $offset
-     * @return list<array<array{string, int}>>
+     * @return list<array<RegexMatch>>
      */
-    public function matchAllOffsets(string $subject, int $offset = 0): array
+    public function matchAll(string $subject, int $offset = 0): array
     {
         [$count, $match] = $this->call(function () use ($subject, $offset) {
             $match = [];
@@ -109,10 +72,21 @@ class Regex
             return [];
         }
 
-        return array_map(
-            static fn (array $set) => array_filter($set, static fn (mixed $value) => \is_string($value[0])),
-            $match
-        );
+        $result = [];
+
+        foreach ($match as $set) {
+            $resultSet = [];
+
+            foreach ($set as $name => [$value, $matchOffset]) {
+                if (\is_string($value)) {
+                    $resultSet[$name] = new RegexMatch($name, $value, $matchOffset);
+                }
+            }
+
+            $result[] = $resultSet;
+        }
+
+        return $result;
     }
 
     public function matches(string $subject, int $offset = 0): bool
