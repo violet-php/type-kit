@@ -20,9 +20,9 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         Trace::class => true,
     ];
 
-    private function __construct(string $message)
+    protected function __construct(string $message, ?\Throwable $previous = null)
     {
-        parent::__construct($message);
+        parent::__construct($message, previous: $previous);
 
         $this->overrideLocation();
     }
@@ -54,7 +54,7 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         );
     }
 
-    private static function describeType(mixed $value): string
+    protected static function describeType(mixed $value): string
     {
         if (\is_array($value)) {
             $types = array_map(get_debug_type(...), $value);

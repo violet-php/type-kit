@@ -163,7 +163,7 @@ class Regex
             }
 
             return $result;
-        } catch (ErrorException $exception) {
+        } catch (\Throwable $exception) {
             $message = preg_replace('/^preg_[a-z0-9_]+\(\):\s*/', '', $exception->getMessage());
             throw new PcreException('Error in regular expression: ' . $message, 0, $exception);
         }

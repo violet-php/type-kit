@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Violet\TypeKit;
 
 use Violet\TypeKit\Type\ArrayTypesTrait;
+use Violet\TypeKit\Type\ConditionalArrayTypesTrait;
+use Violet\TypeKit\Type\ConditionalListTypesTrait;
 use Violet\TypeKit\Type\ListTypesTrait;
 use Violet\TypeKit\Type\PlainTypesTrait;
 
@@ -18,4 +20,6 @@ class Type
     use PlainTypesTrait;
     use ArrayTypesTrait;
     use ListTypesTrait;
+    use ConditionalArrayTypesTrait;
+    use ConditionalListTypesTrait;
 }
