@@ -42,20 +42,20 @@ trait CastPlainTypesTrait
 
     public static function array(mixed $value): array
     {
-        return self::handleCast(
-            static fn (): array => $value instanceof \Traversable ? iterator_to_array($value) : $value,
-            $value,
-            'array'
-        );
+        if ($value instanceof \Traversable) {
+            return self::handleCast(static fn (): array => iterator_to_array($value), $value, 'array');
+        }
+
+        if (\is_object($value)) {
+            return self::handleCast(static fn (): array => get_object_vars($value), $value, 'array');
+        }
+
+        return self::handleCast(static fn (): array => $value, $value, 'array');
     }
 
     public static function list(mixed $value): array
     {
-        return array_values(self::handleCast(
-            static fn (): array => $value instanceof \Traversable ? iterator_to_array($value) : $value,
-            $value,
-            'list'
-        ));
+        return array_values(self::array($value));
     }
 
     public static function object(mixed $value): object
