@@ -17,40 +17,40 @@ trait CastPlainTypesTrait
 {
     public static function null(mixed $value): mixed
     {
-        return self::handleCast(static fn (): mixed => null, $value, 'null');
+        return self::handlePlainCast(static fn (): mixed => null, $value, 'null');
     }
 
     public static function bool(mixed $value): bool
     {
-        return self::handleCast(static fn (): bool => $value, $value, 'bool');
+        return self::handlePlainCast(static fn (): bool => $value, $value, 'bool');
     }
 
     public static function int(mixed $value): int
     {
-        return self::handleCast(static fn (): int => $value, $value, 'int');
+        return self::handlePlainCast(static fn (): int => $value, $value, 'int');
     }
 
     public static function float(mixed $value): float
     {
-        return self::handleCast(static fn (): float => $value, $value, 'float');
+        return self::handlePlainCast(static fn (): float => $value, $value, 'float');
     }
 
     public static function string(mixed $value): string
     {
-        return self::handleCast(static fn (): string => $value, $value, 'string');
+        return self::handlePlainCast(static fn (): string => $value, $value, 'string');
     }
 
     public static function array(mixed $value): array
     {
         if ($value instanceof \Traversable) {
-            return self::handleCast(static fn (): array => iterator_to_array($value), $value, 'array');
+            return self::handlePlainCast(static fn (): array => iterator_to_array($value), $value, 'array');
         }
 
         if (\is_object($value)) {
-            return self::handleCast(static fn (): array => get_object_vars($value), $value, 'array');
+            return self::handlePlainCast(static fn (): array => get_object_vars($value), $value, 'array');
         }
 
-        return self::handleCast(static fn (): array => $value, $value, 'array');
+        return self::handlePlainCast(static fn (): array => $value, $value, 'array');
     }
 
     public static function list(mixed $value): array
@@ -60,7 +60,7 @@ trait CastPlainTypesTrait
 
     public static function object(mixed $value): object
     {
-        return self::handleCast(static fn (): object => $value, $value, 'object');
+        return self::handlePlainCast(static fn (): object => $value, $value, 'object');
     }
 
     public static function instance(mixed $value, string $class): object
@@ -69,7 +69,7 @@ trait CastPlainTypesTrait
             throw InvalidClassException::createFromName($class);
         }
 
-        $result = self::handleCast(static fn (): object => $value, $value, $class);
+        $result = self::handlePlainCast(static fn (): object => $value, $value, $class);
 
         if (!$result instanceof $class) {
             throw CastException::createFromMessage($value, $class, 'Cannot cast objects to other objects');
@@ -80,7 +80,7 @@ trait CastPlainTypesTrait
 
     public static function iterable(mixed $value): array
     {
-        return self::handleCast(static fn (): iterable => $value, $value, 'iterable');
+        return self::handlePlainCast(static fn (): iterable => $value, $value, 'iterable');
     }
 
     public static function resource(mixed $value): mixed
@@ -92,10 +92,10 @@ trait CastPlainTypesTrait
 
     public static function callable(mixed $value): callable
     {
-        return self::handleCast(static fn (): callable => $value, $value, 'callable');
+        return self::handlePlainCast(static fn (): callable => $value, $value, 'callable');
     }
 
-    private static function handleCast(\Closure $cast, mixed $value, string $expectedType): mixed
+    private static function handlePlainCast(\Closure $cast, mixed $value, string $expectedType): mixed
     {
         try {
             return ErrorHandler::handleCall($cast);

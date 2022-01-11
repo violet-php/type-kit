@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit;
 
+use Violet\TypeKit\Type\CastArrayTypesTrait;
+use Violet\TypeKit\Type\CastListTypesTrait;
 use Violet\TypeKit\Type\CastPlainTypesTrait;
 
 /**
@@ -14,4 +16,6 @@ use Violet\TypeKit\Type\CastPlainTypesTrait;
 class Cast
 {
     use CastPlainTypesTrait;
+    use CastArrayTypesTrait;
+    use CastListTypesTrait;
 }

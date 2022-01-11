@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit;
 
+use Violet\TypeKit\Type\AssertArrayTypesTrait;
+use Violet\TypeKit\Type\AssertListTypesTrait;
 use Violet\TypeKit\Type\AssertPlainTypesTrait;
 
 /**
@@ -14,4 +16,6 @@ use Violet\TypeKit\Type\AssertPlainTypesTrait;
 class Assert
 {
     use AssertPlainTypesTrait;
+    use AssertArrayTypesTrait;
+    use AssertListTypesTrait;
 }
