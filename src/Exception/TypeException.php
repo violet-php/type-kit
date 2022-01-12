@@ -17,11 +17,11 @@ use Violet\TypeKit\Type;
 class TypeException extends \UnexpectedValueException implements TypeKitException
 {
     private const IGNORED_CLASSES = [
-        self::class,
-        Cast::class,
-        Type::class,
+        TypeKitException::class,
         Trace::class,
+        Type::class,
         Assert::class,
+        Cast::class,
     ];
 
     protected function __construct(string $message, ?\Throwable $previous = null)
@@ -37,9 +37,17 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         $index = 0;
 
         foreach ($trace as $index => $entry) {
-            if ($entry->class === null || !\array_key_exists($entry->class, self::IGNORED_CLASSES)) {
+            if ($entry->class === null) {
                 break;
             }
+
+            foreach (self::IGNORED_CLASSES as $class) {
+                if (is_a($entry->class, $class, true)) {
+                    continue 2;
+                }
+            }
+
+            break;
         }
 
         foreach (\array_slice($trace, $index - 1) as $entry) {
@@ -53,7 +61,7 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
 
     public static function createFromValue(mixed $value, string $expectedType): self
     {
-        return new self(
+        return new static(
             sprintf("Got unexpected value type '%s', was expecting '%s'", self::describeType($value), $expectedType)
         );
     }

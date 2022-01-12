@@ -13,7 +13,7 @@ use Violet\TypeKit\Exception\InvalidClassException;
  */
 trait ConditionalArrayTypesTrait
 {
-    public function isNullArray(mixed $value): bool
+    public static function isNullArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -28,7 +28,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isBoolArray(mixed $value): bool
+    public static function isBoolArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -43,7 +43,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isIntArray(mixed $value): bool
+    public static function isIntArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -58,7 +58,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isFloatArray(mixed $value): bool
+    public static function isFloatArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -73,7 +73,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isStringArray(mixed $value): bool
+    public static function isStringArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -88,7 +88,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isArrayArray(mixed $value): bool
+    public static function isArrayArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -103,7 +103,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isListArray(mixed $value): bool
+    public static function isListArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -118,7 +118,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isObjectArray(mixed $value): bool
+    public static function isObjectArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -133,7 +133,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isInstanceArray(mixed $value, string $class): bool
+    public static function isInstanceArray(mixed $value, string $class): bool
     {
         if (!class_exists($class) && !interface_exists($class)) {
             throw InvalidClassException::createFromName($class);
@@ -152,7 +152,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isIterableArray(mixed $value): bool
+    public static function isIterableArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -167,7 +167,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isResourceArray(mixed $value): bool
+    public static function isResourceArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;
@@ -182,7 +182,7 @@ trait ConditionalArrayTypesTrait
         return true;
     }
 
-    public function isCallableArray(mixed $value): bool
+    public static function isCallableArray(mixed $value): bool
     {
         if (!\is_array($value)) {
             return false;

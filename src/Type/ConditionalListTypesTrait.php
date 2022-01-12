@@ -13,62 +13,62 @@ use Violet\TypeKit\Type;
  */
 trait ConditionalListTypesTrait
 {
-    public function isNullList(mixed $value): bool
+    public static function isNullList(mixed $value): bool
     {
         return Type::isNullArray($value) && array_is_list($value);
     }
 
-    public function isBoolList(mixed $value): bool
+    public static function isBoolList(mixed $value): bool
     {
         return Type::isBoolArray($value) && array_is_list($value);
     }
 
-    public function isIntList(mixed $value): bool
+    public static function isIntList(mixed $value): bool
     {
         return Type::isIntArray($value) && array_is_list($value);
     }
 
-    public function isFloatList(mixed $value): bool
+    public static function isFloatList(mixed $value): bool
     {
         return Type::isFloatArray($value) && array_is_list($value);
     }
 
-    public function isStringList(mixed $value): bool
+    public static function isStringList(mixed $value): bool
     {
         return Type::isStringArray($value) && array_is_list($value);
     }
 
-    public function isArrayList(mixed $value): bool
+    public static function isArrayList(mixed $value): bool
     {
         return Type::isArrayArray($value) && array_is_list($value);
     }
 
-    public function isListList(mixed $value): bool
+    public static function isListList(mixed $value): bool
     {
         return Type::isListArray($value) && array_is_list($value);
     }
 
-    public function isObjectList(mixed $value): bool
+    public static function isObjectList(mixed $value): bool
     {
         return Type::isObjectArray($value) && array_is_list($value);
     }
 
-    public function isInstanceList(mixed $value, string $class): bool
+    public static function isInstanceList(mixed $value, string $class): bool
     {
         return Type::isInstanceArray($value, $class) && array_is_list($value);
     }
 
-    public function isIterableList(mixed $value): bool
+    public static function isIterableList(mixed $value): bool
     {
         return Type::isIterableArray($value) && array_is_list($value);
     }
 
-    public function isResourceList(mixed $value): bool
+    public static function isResourceList(mixed $value): bool
     {
         return Type::isResourceArray($value) && array_is_list($value);
     }
 
-    public function isCallableList(mixed $value): bool
+    public static function isCallableList(mixed $value): bool
     {
         return Type::isCallableArray($value) && array_is_list($value);
     }
