@@ -55,7 +55,7 @@ trait CastPlainTypesTrait
 
     public static function list(mixed $value): array
     {
-        return array_values(self::array($value));
+        return self::handlePlainCast(static fn (): array => array_values(self::array($value)), $value, 'list');
     }
 
     public static function object(mixed $value): object
