@@ -157,15 +157,15 @@ class Regex
     {
         try {
             $result = ErrorHandler::handleCall($closure);
-
-            if (preg_last_error() !== PREG_NO_ERROR) {
-                throw new PcreException('Error in regular expression: ' . preg_last_error_msg());
-            }
-
-            return $result;
         } catch (\Throwable $exception) {
             $message = preg_replace('/^preg_[a-z0-9_]+\(\):\s*/', '', $exception->getMessage());
             throw new PcreException('Error in regular expression: ' . $message, 0, $exception);
         }
+
+        if (preg_last_error() !== PREG_NO_ERROR) {
+            throw new PcreException('Error in regular expression: ' . preg_last_error_msg());
+        }
+
+        return $result;
     }
 }

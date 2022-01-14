@@ -57,10 +57,6 @@ trait ArrayTypesTrait
 
     public static function instanceArray(mixed $value, string $class): array
     {
-        if (!class_exists($class) && !interface_exists($class)) {
-            throw InvalidClassException::createFromName($class);
-        }
-
         return Type::isInstanceArray($value, $class)
             ? $value
             : throw TypeException::createFromValue($value, "array<$class>");

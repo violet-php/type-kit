@@ -26,4 +26,20 @@ class ErrorHandlerTest extends TestCase
     {
         $this->assertSame(123, ErrorHandler::handleCall(static fn () => 123));
     }
+
+    public function testThrowingError(): void
+    {
+        $file = __FILE__;
+        $line = __LINE__;
+
+        try {
+            ErrorHandler::throwErrorException(E_USER_NOTICE, 'Test error', $file, $line);
+        } catch (ErrorException $exception) {
+            $this->assertSame('Test error', $exception->getMessage());
+            $this->assertSame(0, $exception->getCode());
+            $this->assertSame(E_USER_NOTICE, $exception->getSeverity());
+            $this->assertSame($file, $exception->getFile());
+            $this->assertSame($line, $exception->getLine());
+        }
+    }
 }

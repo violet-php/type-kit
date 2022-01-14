@@ -57,10 +57,6 @@ trait ListTypesTrait
 
     public static function instanceList(mixed $value, string $class): array
     {
-        if (!class_exists($class) && !interface_exists($class)) {
-            throw InvalidClassException::createFromName($class);
-        }
-
         return Type::isInstanceList($value, $class)
             ? $value
             : throw TypeException::createFromValue($value, "list<$class>");

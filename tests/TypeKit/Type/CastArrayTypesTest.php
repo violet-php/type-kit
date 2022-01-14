@@ -72,6 +72,11 @@ class CastArrayTypesTest extends TypedTestCase
         Cast::instanceArray([new CompliantClass()], CompliantTrait::class);
     }
 
+    public function testWholeArrayIsReturned(): void
+    {
+        $this->assertSame([0 => 1, 'foo' => 2, 3 => 3], Cast::intArray([0 => 1, 'foo' => 2, 3 => '3']));
+    }
+
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sArray', $name);

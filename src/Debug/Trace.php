@@ -13,6 +13,9 @@ use Violet\TypeKit\Type;
  */
 class Trace
 {
+    public const INCLUDE_ARGUMENTS = 1;
+    public const INCLUDE_OBJECT = 2;
+
     public readonly ?string $function;
     public readonly ?int $line;
     public readonly ?string $file;
@@ -44,9 +47,24 @@ class Trace
      */
     public static function getBacktrace(int $options = 0, int $depth = 0): array
     {
+        $include = array_flip(array_merge(
+            ['function', 'line', 'file', 'class', 'type'],
+            ($options & self::INCLUDE_ARGUMENTS) === 0 ? [] : ['args'],
+            ($options & self::INCLUDE_OBJECT) === 0 ? [] : ['object'],
+        ));
+
+        $callOptions =
+            (isset($include['args']) ? 0 : DEBUG_BACKTRACE_IGNORE_ARGS) |
+            (isset($include['object']) ? DEBUG_BACKTRACE_PROVIDE_OBJECT : 0);
+
         return array_map(
-            static fn (array $entry) => new self($entry),
-            debug_backtrace($options, $depth)
+            static fn (array $entry) => new self(array_intersect_key($entry, $include)),
+            debug_backtrace($callOptions, $depth)
         );
+    }
+
+    public function hasLocation(): bool
+    {
+        return $this->file !== null && $this->line !== null;
     }
 }

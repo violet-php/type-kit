@@ -70,6 +70,11 @@ class CastListTypesTest extends TypedTestCase
         Cast::instanceList([new CompliantClass()], CompliantTrait::class);
     }
 
+    public function testWholeArrayIsReturned(): void
+    {
+        $this->assertSame([1, 2, 3], Cast::intList([0 => 1, 'foo' => 2, 3 => '3']));
+    }
+
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sList', $name);

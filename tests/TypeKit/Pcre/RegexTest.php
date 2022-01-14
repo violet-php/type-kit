@@ -17,12 +17,13 @@ class RegexTest extends TestCase
     public function testInvalidPattern(): void
     {
         $this->expectException(PcreException::class);
-        $this->expectExceptionMessage('No ending delimiter');
+        $this->expectExceptionMessage('Error in regular expression: No ending delimiter');
+        $this->expectExceptionCode(0);
 
         new Regex('/foo');
     }
 
-    public function testNoFunctionNameInEerror(): void
+    public function testNoFunctionNameInError(): void
     {
         try {
             new Regex('/foo');
@@ -37,7 +38,8 @@ class RegexTest extends TestCase
         $regex = new Regex('/(?:\D+|<\d+>)*[!?]/');
 
         $this->expectException(PcreException::class);
-        $this->expectExceptionMessage('Backtrack limit exhausted');
+        $this->expectExceptionMessage('Error in regular expression: Backtrack limit exhausted');
+        $this->expectExceptionCode(0);
 
         $regex->match('foobar foobar foobar');
     }

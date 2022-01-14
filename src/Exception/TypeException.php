@@ -37,13 +37,11 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         $index = 0;
 
         foreach ($trace as $index => $entry) {
-            if ($entry->class === null) {
-                break;
-            }
-
-            foreach (self::IGNORED_CLASSES as $class) {
-                if (is_a($entry->class, $class, true)) {
-                    continue 2;
+            if ($entry->class !== null) {
+                foreach (self::IGNORED_CLASSES as $class) {
+                    if (is_a($entry->class, $class, true)) {
+                        continue 2;
+                    }
                 }
             }
 
@@ -51,7 +49,7 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         }
 
         foreach (\array_slice($trace, $index - 1) as $entry) {
-            if ($entry->file !== null && $entry->line !== null) {
+            if ($entry->hasLocation()) {
                 $this->file = $entry->file;
                 $this->line = $entry->line;
                 break;

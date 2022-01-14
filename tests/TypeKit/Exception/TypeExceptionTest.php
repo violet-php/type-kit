@@ -80,6 +80,7 @@ class TypeExceptionTest extends TestCase
             [[[]], 'list<array>'],
             [[1 => 1], 'array<int>'],
             [[1, 'list'], 'list<int|string>'],
+            [[new \DateTimeImmutable(), new \DateTimeImmutable()], 'list<' . \DateTimeImmutable::class . '>']
         ];
     }
 }
