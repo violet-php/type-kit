@@ -14,9 +14,11 @@ use Violet\TypeKit\Debug\Trace;
  */
 class TraceTest extends TestCase
 {
+    private const INCLUDE_FUNCTIONS = ['include', 'include_once', 'require', 'require_once'];
+
     public function testDefaultTraceHasNoExtraData(): void
     {
-        $trace = Trace::getBacktrace();
+        $trace = $this->filterIncludes(Trace::getBacktrace());
         $nulls = array_fill(0, \count($trace), null);
 
         $this->assertSame($nulls, array_column($trace, 'object'));
@@ -25,7 +27,7 @@ class TraceTest extends TestCase
 
     public function testIncludingOnlyArgs(): void
     {
-        $trace = Trace::getBacktrace(Trace::INCLUDE_ARGUMENTS);
+        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true));
         $nulls = array_fill(0, \count($trace), null);
 
         $this->assertSame($nulls, array_column($trace, 'object'));
@@ -34,7 +36,7 @@ class TraceTest extends TestCase
 
     public function testIncludingOnlyObject(): void
     {
-        $trace = Trace::getBacktrace(Trace::INCLUDE_OBJECT);
+        $trace = $this->filterIncludes(Trace::getBacktrace(includeObject: true));
         $nulls = array_fill(0, \count($trace), null);
 
         $this->assertNotSame($nulls, array_column($trace, 'object'));
@@ -43,7 +45,7 @@ class TraceTest extends TestCase
 
     public function testIncludingExtraData(): void
     {
-        $trace = Trace::getBacktrace(Trace::INCLUDE_ARGUMENTS | Trace::INCLUDE_OBJECT);
+        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true, includeObject: true));
         $nulls = array_fill(0, \count($trace), null);
 
         $this->assertNotSame($nulls, array_column($trace, 'object'));
@@ -53,7 +55,7 @@ class TraceTest extends TestCase
     public function testTraceContainsValidData(): void
     {
         $line = __LINE__ + 1;
-        $trace = Trace::getBacktrace(Trace::INCLUDE_ARGUMENTS | Trace::INCLUDE_OBJECT);
+        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true, includeObject: true));
         $top = array_shift($trace);
 
         while ($top instanceof Trace && $top->function !== 'getBacktrace') {
@@ -67,7 +69,7 @@ class TraceTest extends TestCase
         $this->assertSame(Trace::class, $top->class);
         $this->assertSame('::', $top->type);
         $this->assertSame('getBacktrace', $top->function);
-        $this->assertSame([Trace::INCLUDE_ARGUMENTS | Trace::INCLUDE_OBJECT], $top->args);
+        $this->assertSame([true, true], $top->args);
         $this->assertNull($top->object);
 
         $next = array_shift($trace);
@@ -81,5 +83,13 @@ class TraceTest extends TestCase
         $this->assertTrue((new Trace(['file' => __FILE__, 'line' => __LINE__]))->hasLocation());
         $this->assertFalse((new Trace(['file' => __FILE__]))->hasLocation());
         $this->assertFalse((new Trace(['line' => __LINE__]))->hasLocation());
+    }
+
+    private function filterIncludes(array $trace): array
+    {
+        return array_values(array_filter(
+            $trace,
+            static fn (Trace $trace) => !\in_array($trace->function, self::INCLUDE_FUNCTIONS, true)
+        ));
     }
 }

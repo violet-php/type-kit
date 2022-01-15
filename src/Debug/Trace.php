@@ -41,24 +41,22 @@ class Trace
     }
 
     /**
-     * @param int $options
+     * @param bool $includeArguments
+     * @param bool $includeObject
      * @param int $depth
      * @return list<self>
      */
-    public static function getBacktrace(int $options = 0, int $depth = 0): array
-    {
-        $include = array_flip(array_merge(
-            ['function', 'line', 'file', 'class', 'type'],
-            ($options & self::INCLUDE_ARGUMENTS) === 0 ? [] : ['args'],
-            ($options & self::INCLUDE_OBJECT) === 0 ? [] : ['object'],
-        ));
-
+    public static function getBacktrace(
+        bool $includeArguments = false,
+        bool $includeObject = false,
+        int $depth = 0
+    ): array {
         $callOptions =
-            (isset($include['args']) ? 0 : DEBUG_BACKTRACE_IGNORE_ARGS) |
-            (isset($include['object']) ? DEBUG_BACKTRACE_PROVIDE_OBJECT : 0);
+            ($includeArguments ? 0 : DEBUG_BACKTRACE_IGNORE_ARGS) |
+            ($includeObject ? DEBUG_BACKTRACE_PROVIDE_OBJECT : 0);
 
         return array_map(
-            static fn (array $entry) => new self(array_intersect_key($entry, $include)),
+            static fn (array $entry) => new self($entry),
             debug_backtrace($callOptions, $depth)
         );
     }
