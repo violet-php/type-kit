@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Pcre;
 
 use Violet\TypeKit\Debug\ErrorHandler;
-use Violet\TypeKit\Exception\ErrorException;
 use Violet\TypeKit\Exception\PcreException;
 use Violet\TypeKit\Type;
 
@@ -16,6 +15,8 @@ use Violet\TypeKit\Type;
  */
 class Regex
 {
+    private const NO_LIMIT = -1;
+
     public readonly string $regex;
 
     public function __construct(string $regex)
@@ -94,7 +95,7 @@ class Regex
         return $this->call(fn () => preg_match($this->regex, $subject, offset: $offset)) === 1;
     }
 
-    public function replace(string $replacement, string $subject, int $limit = -1): string
+    public function replace(string $replacement, string $subject, int $limit = self::NO_LIMIT): string
     {
         return Type::string($this->call(fn () => preg_replace($this->regex, $replacement, $subject, $limit)));
     }
@@ -105,7 +106,7 @@ class Regex
      * @param int $limit
      * @return string
      */
-    public function replaceCallback(\Closure $callback, string $subject, int $limit = -1): string
+    public function replaceCallback(\Closure $callback, string $subject, int $limit = self::NO_LIMIT): string
     {
         return Type::string($this->call(fn () => preg_replace_callback($this->regex, $callback, $subject, $limit)));
     }
@@ -115,7 +116,7 @@ class Regex
      * @param int $limit
      * @return list<string>
      */
-    public function split(string $subject, int $limit = -1): array
+    public function split(string $subject, int $limit = self::NO_LIMIT): array
     {
         return Type::stringList($this->call(fn () => preg_split($this->regex, $subject, $limit)));
     }

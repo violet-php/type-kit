@@ -31,13 +31,13 @@ class Trace
      */
     public function __construct(array $trace)
     {
-        $this->function = isset($trace['function']) ? Type::string($trace['function']) : null;
-        $this->line = isset($trace['line']) ? Type::int($trace['line']) : null;
-        $this->file = isset($trace['file']) ? Type::string($trace['file']) : null;
-        $this->class = isset($trace['class']) ? Type::string($trace['class']) : null;
-        $this->object = isset($trace['object']) ? Type::object($trace['object']) : null;
-        $this->type = isset($trace['type']) ? Type::string($trace['type']) : null;
-        $this->args = isset($trace['args']) ? Type::list($trace['args']) : null;
+        $this->function = isset($trace['function']) && \is_string($trace['function']) ? $trace['function'] : null;
+        $this->line = isset($trace['line']) && \is_int($trace['line']) ? $trace['line'] : null;
+        $this->file = isset($trace['file']) && \is_string($trace['file']) ? $trace['file'] : null;
+        $this->class = isset($trace['class']) && \is_string($trace['class']) ? $trace['class'] : null;
+        $this->object = isset($trace['object']) && \is_object($trace['object']) ? $trace['object'] : null;
+        $this->type = isset($trace['type']) && \is_string($trace['type']) ? $trace['type'] : null;
+        $this->args = isset($trace['args']) && \is_array($trace['args']) ? $trace['args'] : null;
     }
 
     /**

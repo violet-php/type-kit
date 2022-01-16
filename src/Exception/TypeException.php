@@ -34,27 +34,28 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
     private function overrideLocation(): void
     {
         $trace = Trace::getBacktrace();
-        $index = 0;
 
-        foreach ($trace as $index => $entry) {
-            if ($entry->class !== null) {
-                foreach (self::IGNORED_CLASSES as $class) {
-                    if (is_a($entry->class, $class, true)) {
-                        continue 2;
-                    }
-                }
-            }
+        do {
+            $caller = array_shift($trace);
+        } while ($this->isIgnored($trace[0]));
 
-            break;
+        while (!$caller->hasLocation()) {
+            $caller = array_shift($trace);
         }
 
-        foreach (\array_slice($trace, $index - 1) as $entry) {
-            if ($entry->hasLocation()) {
-                $this->file = $entry->file;
-                $this->line = $entry->line;
-                break;
+        $this->file = $caller->file;
+        $this->line = $caller->line;
+    }
+
+    private function isIgnored(Trace $entry): bool
+    {
+        foreach (self::IGNORED_CLASSES as $class) {
+            if (is_a($entry->class, $class, true)) {
+                return true;
             }
         }
+
+        return false;
     }
 
     public static function createFromValue(mixed $value, string $expectedType): self
