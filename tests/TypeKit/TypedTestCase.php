@@ -20,51 +20,50 @@ abstract class TypedTestCase extends TestCase
     public function getValidValuesTestCases(): array
     {
         return [
-            [['null'], null],
-            [['bool'], true],
-            [['int'], 1],
-            [['float'], 1.1],
-            [['string'], 'foobar'],
-            [['array'], [1]],
-            [['array'], ['foo' => 'bar']],
-            [['list'], [1]],
-            [['object'], new CompliantClass()],
-            [['instance', CompliantClass::class], new CompliantClass()],
-            [['instance', AbstractCompliantClass::class], new CompliantClass()],
-            [['instance', CompliantInterface::class], new CompliantClass()],
-            [['iterable'], [1]],
-            [['resource'], tmpfile()],
-            [['callable'], strlen(...)],
+            [$this->makeCall('null'), null],
+            [$this->makeCall('bool'), true],
+            [$this->makeCall('int'), 1],
+            [$this->makeCall('float'), 1.1],
+            [$this->makeCall('string'), 'foobar'],
+            [$this->makeCall('array'), [1]],
+            [$this->makeCall('array'), ['foo' => 'bar']],
+            [$this->makeCall('list'), [1]],
+            [$this->makeCall('object'), new CompliantClass()],
+            [$this->makeCall('instance', [CompliantClass::class]), new CompliantClass()],
+            [$this->makeCall('instance', [AbstractCompliantClass::class]), new CompliantClass()],
+            [$this->makeCall('instance', [CompliantInterface::class]), new CompliantClass()],
+            [$this->makeCall('iterable'), [1]],
+            [$this->makeCall('resource'), tmpfile()],
+            [$this->makeCall('callable'), strlen(...)],
         ];
     }
 
     public function getInvalidValuesTestCases(): array
     {
         return [
-            [['null'], true, 'null'],
-            [['bool'], null, 'bool'],
-            [['int'], null, 'int'],
-            [['float'], null, 'float'],
-            [['string'], null, 'string'],
-            [['array'], null, 'array'],
-            [['list'], null, 'list'],
-            [['list'], ['foo' => 'bar'], 'list'],
-            [['object'], null, 'object'],
-            [['instance', CompliantClass::class], null, CompliantClass::class],
-            [['instance', CompliantClass::class], new NonCompliantClass(), CompliantClass::class],
-            [['iterable'], null, 'iterable'],
-            [['resource'], null, 'resource'],
-            [['callable'], null, 'callable'],
+            [$this->makeCall('null'), true, 'null'],
+            [$this->makeCall('bool'), null, 'bool'],
+            [$this->makeCall('int'), null, 'int'],
+            [$this->makeCall('float'), null, 'float'],
+            [$this->makeCall('string'), null, 'string'],
+            [$this->makeCall('array'), null, 'array'],
+            [$this->makeCall('list'), null, 'list'],
+            [$this->makeCall('list'), ['foo' => 'bar'], 'list'],
+            [$this->makeCall('object'), null, 'object'],
+            [$this->makeCall('instance', [CompliantClass::class]), null, CompliantClass::class],
+            [$this->makeCall('instance', [CompliantClass::class]), new NonCompliantClass(), CompliantClass::class],
+            [$this->makeCall('iterable'), null, 'iterable'],
+            [$this->makeCall('resource'), null, 'resource'],
+            [$this->makeCall('callable'), null, 'callable'],
         ];
     }
 
-    protected function getCallback(array $call): \Closure
+    private function makeCall(string $type, array $arguments = []): \Closure
     {
-        $name = array_shift($call);
-        $callback = $this->formatCallback($name);
+        $callback = $this->formatCallback($type);
 
-        return \count($call) > 0
-            ? static fn (mixed $item) => $callback($item, ... $call)
+        return \count($arguments) > 0
+            ? static fn (mixed $value) => $callback($value, ... $arguments)
             : $callback;
     }
 

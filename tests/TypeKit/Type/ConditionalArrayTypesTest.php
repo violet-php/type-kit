@@ -18,30 +18,26 @@ use Violet\TypeKit\TypedTestCase;
 class ConditionalArrayTypesTest extends TypedTestCase
 {
     /** @dataProvider getValidValuesTestCases */
-    public function testValidValues(array $call, mixed $value): void
+    public function testValidValues(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertTrue($callback([$value]));
     }
 
     /** @dataProvider getValidValuesTestCases */
-    public function testValidValuesMap(array $call, mixed $value): void
+    public function testValidValuesMap(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertTrue($callback(['foobar' => $value]));
     }
 
     /** @dataProvider getInvalidValuesTestCases */
-    public function testInvalidValues(array $call, mixed $value): void
+    public function testInvalidValues(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertFalse($callback($value));
     }
 
     /** @dataProvider getInvalidValuesTestCases */
-    public function testInvalidItemValues(array $call, mixed $value): void
+    public function testInvalidItemValues(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertFalse($callback([$value]));
     }
 

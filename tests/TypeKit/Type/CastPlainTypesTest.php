@@ -20,17 +20,15 @@ use Violet\TypeKit\TypedTestCase;
 class CastPlainTypesTest extends TypedTestCase
 {
     /** @dataProvider getValidValuesTestCases */
-    public function testValidValues(array $call, mixed $value): void
+    public function testValidValues(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertSame($value, $callback($value));
     }
 
     /** @dataProvider getInvalidValuesTestCases */
-    public function testInvalidValues(array $call, mixed $value, string $expectedType): void
+    public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         try {
-            $callback = $this->getCallback($call);
             $this->assertNotSame($value, $callback($value));
         } catch (CastException $exception) {
             $pattern = sprintf(

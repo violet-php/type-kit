@@ -19,21 +19,18 @@ use Violet\TypeKit\TypedTestCase;
 class PlainTypesTest extends TypedTestCase
 {
     /** @dataProvider getValidValuesTestCases */
-    public function testValidValues(array $call, mixed $value): void
+    public function testValidValues(\Closure $callback, mixed $value): void
     {
-        $callback = $this->getCallback($call);
         $this->assertSame($value, $callback($value));
     }
 
     /** @dataProvider getInvalidValuesTestCases */
-    public function testInvalidValues(array $call, mixed $value, string $expectedType): void
+    public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         $pattern = sprintf(
             "/Got unexpected value type '[^']+', was expecting '%s'/",
             preg_quote($expectedType, '/')
         );
-
-        $callback = $this->getCallback($call);
 
         $this->expectException(TypeException::class);
         $this->expectExceptionMessageMatches($pattern);
