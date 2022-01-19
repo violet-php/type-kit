@@ -17,6 +17,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return null
+     * @throws TypeException If the provided value is not null
      */
     public static function null(mixed $value): mixed
     {
@@ -26,6 +27,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return bool
+     * @throws TypeException If the provided value is not bool
      */
     public static function bool(mixed $value): bool
     {
@@ -35,6 +37,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return int
+     * @throws TypeException If the provided value is not int
      */
     public static function int(mixed $value): int
     {
@@ -44,6 +47,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return float
+     * @throws TypeException If the provided value is not float
      */
     public static function float(mixed $value): float
     {
@@ -53,6 +57,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return string
+     * @throws TypeException If the provided value is not string
      */
     public static function string(mixed $value): string
     {
@@ -62,6 +67,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return array<mixed>
+     * @throws TypeException If the provided value is not array
      */
     public static function array(mixed $value): array
     {
@@ -71,6 +77,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return list<mixed>
+     * @throws TypeException If the provided value is not list
      */
     public static function list(mixed $value): array
     {
@@ -82,6 +89,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return object
+     * @throws TypeException If the provided value is not object
      */
     public static function object(mixed $value): object
     {
@@ -93,6 +101,7 @@ trait PlainTypesTrait
      * @param mixed $value
      * @param class-string<T> $class
      * @return T
+     * @throws TypeException If the provided value is not instance of the provided class
      */
     public static function instance(mixed $value, string $class): object
     {
@@ -106,6 +115,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return iterable<mixed>
+     * @throws TypeException If the provided value is not iterable
      */
     public static function iterable(mixed $value): iterable
     {
@@ -115,6 +125,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return resource
+     * @throws TypeException If the provided value is not resource
      */
     public static function resource(mixed $value): mixed
     {
@@ -124,6 +135,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return callable
+     * @throws TypeException If the provided value is not callable
      */
     public static function callable(mixed $value): callable
     {
