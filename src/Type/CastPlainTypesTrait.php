@@ -3,7 +3,7 @@
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\Debug\ErrorHandler;
-use Violet\TypeKit\Exception\CastException;
+use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 
 /**
@@ -16,7 +16,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return null
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function null(mixed $value): mixed
     {
@@ -26,7 +26,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return bool
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function bool(mixed $value): bool
     {
@@ -36,7 +36,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return int
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function int(mixed $value): int
     {
@@ -46,7 +46,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return float
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function float(mixed $value): float
     {
@@ -56,7 +56,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return string
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function string(mixed $value): string
     {
@@ -66,7 +66,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return array<mixed>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function array(mixed $value): array
     {
@@ -84,7 +84,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return list<mixed>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function list(mixed $value): array
     {
@@ -94,7 +94,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return object
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function object(mixed $value): object
     {
@@ -106,7 +106,7 @@ trait CastPlainTypesTrait
      * @param mixed $value
      * @param class-string<T> $class
      * @return T
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function instance(mixed $value, string $class): object
     {
@@ -117,7 +117,7 @@ trait CastPlainTypesTrait
         $result = self::handlePlainCast(static fn (): object => $value, $value, $class);
 
         if (!$result instanceof $class) {
-            throw CastException::createFromMessage($value, $class, 'Cannot cast objects to other objects');
+            throw TypeCastException::createFromMessage($value, $class, 'Cannot cast objects to other objects');
         }
 
         return $result;
@@ -126,7 +126,7 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return iterable<mixed>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function iterable(mixed $value): array
     {
@@ -136,19 +136,19 @@ trait CastPlainTypesTrait
     /**
      * @param mixed $value
      * @return resource
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function resource(mixed $value): mixed
     {
         return \is_resource($value)
             ? $value
-            : throw CastException::createFromMessage($value, 'resource', 'Cannot cast other types to resources');
+            : throw TypeCastException::createFromMessage($value, 'resource', 'Cannot cast other types to resources');
     }
 
     /**
      * @param mixed $value
      * @return callable
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function callable(mixed $value): callable
     {
@@ -160,7 +160,7 @@ trait CastPlainTypesTrait
         try {
             return ErrorHandler::handleCall($cast);
         } catch (\Throwable $exception) {
-            throw CastException::createFromFailure($value, $expectedType, $exception);
+            throw TypeCastException::createFromFailure($value, $expectedType, $exception);
         }
     }
 }

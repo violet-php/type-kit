@@ -11,7 +11,7 @@ use Violet\TypeKit\Debug\Debug;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class TypeException extends InvalidTypeException
+class TypeAssertException extends InvalidTypeException
 {
     public static function createFromValue(mixed $value, string $expectedType): self
     {

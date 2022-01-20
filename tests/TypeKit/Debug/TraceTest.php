@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace TypeKit\Debug;
 
 use PHPUnit\Framework\TestCase;
-use Violet\TypeKit\Debug\Trace;
+use Violet\TypeKit\Debug\Debug;
+use Violet\TypeKit\Debug\StackFrame;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
@@ -18,55 +19,52 @@ class TraceTest extends TestCase
 
     public function testDefaultTraceHasNoExtraData(): void
     {
-        $trace = $this->filterIncludes(Trace::getBacktrace());
-        $nulls = array_fill(0, \count($trace), null);
+        $trace = $this->filterIncludes(Debug::getBacktrace());
 
-        $this->assertSame($nulls, array_column($trace, 'object'));
-        $this->assertSame($nulls, array_column($trace, 'args'));
+        $this->assertSame(array_fill(0, \count($trace), null), array_column($trace, 'object'));
+        $this->assertSame(array_fill(0, \count($trace), []), array_column($trace, 'args'));
     }
 
     public function testIncludingOnlyArgs(): void
     {
-        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true));
+        $trace = $this->filterIncludes(Debug::getBacktrace(includeArguments: true));
         $nulls = array_fill(0, \count($trace), null);
 
-        $this->assertSame($nulls, array_column($trace, 'object'));
-        $this->assertNotSame($nulls, array_column($trace, 'args'));
+        $this->assertSame(array_fill(0, \count($trace), null), array_column($trace, 'object'));
+        $this->assertNotSame(array_fill(0, \count($trace), []), array_column($trace, 'args'));
     }
 
     public function testIncludingOnlyObject(): void
     {
-        $trace = $this->filterIncludes(Trace::getBacktrace(includeObject: true));
-        $nulls = array_fill(0, \count($trace), null);
+        $trace = $this->filterIncludes(Debug::getBacktrace(includeObject: true));
 
-        $this->assertNotSame($nulls, array_column($trace, 'object'));
-        $this->assertSame($nulls, array_column($trace, 'args'));
+        $this->assertNotSame(array_fill(0, \count($trace), null), array_column($trace, 'object'));
+        $this->assertSame(array_fill(0, \count($trace), []), array_column($trace, 'args'));
     }
 
     public function testIncludingExtraData(): void
     {
-        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true, includeObject: true));
-        $nulls = array_fill(0, \count($trace), null);
+        $trace = $this->filterIncludes(Debug::getBacktrace(includeArguments: true, includeObject: true));
 
-        $this->assertNotSame($nulls, array_column($trace, 'object'));
-        $this->assertNotSame($nulls, array_column($trace, 'args'));
+        $this->assertNotSame(array_fill(0, \count($trace), null), array_column($trace, 'object'));
+        $this->assertNotSame(array_fill(0, \count($trace), []), array_column($trace, 'args'));
     }
 
     public function testTraceContainsValidData(): void
     {
         $line = __LINE__ + 1;
-        $trace = $this->filterIncludes(Trace::getBacktrace(includeArguments: true, includeObject: true));
+        $trace = $this->filterIncludes(Debug::getBacktrace(includeArguments: true, includeObject: true));
         $top = array_shift($trace);
 
-        while ($top instanceof Trace && $top->function !== 'getBacktrace') {
+        while ($top instanceof StackFrame && $top->function !== 'getBacktrace') {
             $top = array_shift($trace);
         }
 
-        $this->assertInstanceOf(Trace::class, $top);
+        $this->assertInstanceOf(StackFrame::class, $top);
 
         $this->assertSame(__FILE__, $top->file);
         $this->assertSame($line, $top->line);
-        $this->assertSame(Trace::class, $top->class);
+        $this->assertSame(Debug::class, $top->class);
         $this->assertSame('::', $top->type);
         $this->assertSame('getBacktrace', $top->function);
         $this->assertSame([true, true], $top->args);
@@ -74,22 +72,23 @@ class TraceTest extends TestCase
 
         $next = array_shift($trace);
 
-        $this->assertInstanceOf(Trace::class, $next);
+        $this->assertInstanceOf(StackFrame::class, $next);
         $this->assertSame($this, $next->object);
     }
 
     public function testLocationRequiresFileAndLine(): void
     {
-        $this->assertTrue((new Trace(['file' => __FILE__, 'line' => __LINE__]))->hasLocation());
-        $this->assertFalse((new Trace(['file' => __FILE__]))->hasLocation());
-        $this->assertFalse((new Trace(['line' => __LINE__]))->hasLocation());
+        $this->assertTrue((new StackFrame(['line' => __LINE__]))->isInternal());
+        $this->assertTrue((new StackFrame([]))->isInternal());
+        $this->assertFalse((new StackFrame(['file' => __FILE__, 'line' => __LINE__]))->isInternal());
+        $this->assertFalse((new StackFrame(['file' => __FILE__]))->isInternal());
     }
 
     private function filterIncludes(array $trace): array
     {
         return array_values(array_filter(
             $trace,
-            static fn (Trace $trace) => !\in_array($trace->function, self::INCLUDE_FUNCTIONS, true)
+            static fn (StackFrame $trace) => !\in_array($trace->function, self::INCLUDE_FUNCTIONS, true)
         ));
     }
 }

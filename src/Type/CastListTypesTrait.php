@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypeCast;
-use Violet\TypeKit\Exception\CastException;
+use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 
 /**
@@ -18,7 +18,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<null>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function nullList(mixed $value): array
     {
@@ -28,7 +28,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<bool>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function boolList(mixed $value): array
     {
@@ -38,7 +38,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<int>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function intList(mixed $value): array
     {
@@ -48,7 +48,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<float>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function floatList(mixed $value): array
     {
@@ -58,7 +58,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<string>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function stringList(mixed $value): array
     {
@@ -68,7 +68,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<array<mixed>>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function arrayList(mixed $value): array
     {
@@ -78,7 +78,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<list<mixed>>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function listList(mixed $value): array
     {
@@ -88,7 +88,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<object>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function objectList(mixed $value): array
     {
@@ -100,7 +100,7 @@ trait CastListTypesTrait
      * @param mixed $value
      * @param class-string<T> $class
      * @return list<T>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function instanceList(mixed $value, string $class): array
     {
@@ -114,7 +114,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<iterable<mixed>>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function iterableList(mixed $value): array
     {
@@ -124,7 +124,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<resource>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function resourceList(mixed $value): array
     {
@@ -134,7 +134,7 @@ trait CastListTypesTrait
     /**
      * @param mixed $value
      * @return list<callable>
-     * @throws CastException
+     * @throws TypeCastException
      */
     public static function callableList(mixed $value): array
     {
@@ -152,7 +152,7 @@ trait CastListTypesTrait
 
             return $result;
         } catch (\Throwable $exception) {
-            throw CastException::createFromFailure($value, $expectedType, $exception);
+            throw TypeCastException::createFromFailure($value, $expectedType, $exception);
         }
     }
 }

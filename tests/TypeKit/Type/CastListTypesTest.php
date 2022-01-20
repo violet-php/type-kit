@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypeCast;
-use Violet\TypeKit\Exception\CastException;
+use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
@@ -29,7 +29,7 @@ class CastListTypesTest extends TypedTestCase
     {
         try {
             $this->assertNotSame($value, $callback($value));
-        } catch (CastException $exception) {
+        } catch (TypeCastException $exception) {
             $pattern = sprintf(
                 "/Error trying to cast '[^']+' to 'list<%s>'/",
                 preg_quote($expectedType, '/')
@@ -44,7 +44,7 @@ class CastListTypesTest extends TypedTestCase
     {
         try {
             $this->assertNotSame([$value], $callback([$value]));
-        } catch (CastException $exception) {
+        } catch (TypeCastException $exception) {
             $pattern = sprintf(
                 "/Error trying to cast '[^']+' to 'list<%s>'/",
                 preg_quote($expectedType, '/')

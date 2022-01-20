@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypeAssert;
-use Violet\TypeKit\Exception\AssertException;
+use Violet\TypeKit\Exception\TypeAssertException;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
@@ -32,7 +32,7 @@ class AssertListTypesTest extends TypedTestCase
             preg_quote($expectedType, '/')
         );
 
-        $this->expectException(AssertException::class);
+        $this->expectException(TypeAssertException::class);
         $this->expectExceptionMessageMatches($pattern);
 
         $callback($value);
@@ -41,14 +41,14 @@ class AssertListTypesTest extends TypedTestCase
     /** @dataProvider getInvalidValuesTestCases */
     public function testInvalidItemValues(\Closure $callback, mixed $value): void
     {
-        $this->expectException(AssertException::class);
+        $this->expectException(TypeAssertException::class);
         $callback([$value]);
     }
 
     /** @dataProvider getValidValuesTestCases */
     public function testValidNonListValues(\Closure $callback, mixed $value): void
     {
-        $this->expectException(AssertException::class);
+        $this->expectException(TypeAssertException::class);
         $callback([1 => $value]);
     }
 
