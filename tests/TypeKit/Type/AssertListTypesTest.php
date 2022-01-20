@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\Assert;
+use Violet\TypeKit\TypeAssert;
 use Violet\TypeKit\Exception\AssertException;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
@@ -55,12 +55,12 @@ class AssertListTypesTest extends TypedTestCase
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        Assert::instanceList([new CompliantClass()], CompliantTrait::class);
+        TypeAssert::instanceList([new CompliantClass()], CompliantTrait::class);
     }
 
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sList', $name);
-        return Assert::$name(...);
+        return TypeAssert::$name(...);
     }
 }

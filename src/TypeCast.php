@@ -13,7 +13,7 @@ use Violet\TypeKit\Type\CastPlainTypesTrait;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class Cast
+class TypeCast
 {
     use CastPlainTypesTrait;
     use CastArrayTypesTrait;

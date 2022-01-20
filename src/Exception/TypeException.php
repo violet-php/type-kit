@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Exception;
 
-use Violet\TypeKit\Assert;
-use Violet\TypeKit\Cast;
+use Violet\TypeKit\TypeAssert;
+use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Debug\Trace;
 use Violet\TypeKit\Type;
 
@@ -20,8 +20,8 @@ class TypeException extends \UnexpectedValueException implements TypeKitExceptio
         TypeKitException::class,
         Trace::class,
         Type::class,
-        Assert::class,
-        Cast::class,
+        TypeAssert::class,
+        TypeCast::class,
     ];
 
     protected function __construct(string $message, ?\Throwable $previous = null)

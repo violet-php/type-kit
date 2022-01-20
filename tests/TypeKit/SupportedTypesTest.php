@@ -34,12 +34,12 @@ class SupportedTypesTest extends TestCase
         [Type::class, '%sList'],
         [Type::class, 'is%sArray'],
         [Type::class, 'is%sList'],
-        [Assert::class, '%s'],
-        [Assert::class, '%sArray'],
-        [Assert::class, '%sList'],
-        [Cast::class, '%s'],
-        [Cast::class, '%sArray'],
-        [Cast::class, '%sList'],
+        [TypeAssert::class, '%s'],
+        [TypeAssert::class, '%sArray'],
+        [TypeAssert::class, '%sList'],
+        [TypeCast::class, '%s'],
+        [TypeCast::class, '%sArray'],
+        [TypeCast::class, '%sList'],
     ];
 
     public function testAllTypesAreSupported(): void

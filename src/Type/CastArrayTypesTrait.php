@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\Cast;
+use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\CastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 
@@ -22,7 +22,7 @@ trait CastArrayTypesTrait
      */
     public static function nullArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::null(...), $value, 'array<null>');
+        return self::handleArrayCast(TypeCast::null(...), $value, 'array<null>');
     }
 
     /**
@@ -32,7 +32,7 @@ trait CastArrayTypesTrait
      */
     public static function boolArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::bool(...), $value, 'array<bool>');
+        return self::handleArrayCast(TypeCast::bool(...), $value, 'array<bool>');
     }
 
     /**
@@ -42,7 +42,7 @@ trait CastArrayTypesTrait
      */
     public static function intArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::int(...), $value, 'array<int>');
+        return self::handleArrayCast(TypeCast::int(...), $value, 'array<int>');
     }
 
     /**
@@ -52,7 +52,7 @@ trait CastArrayTypesTrait
      */
     public static function floatArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::float(...), $value, 'array<float>');
+        return self::handleArrayCast(TypeCast::float(...), $value, 'array<float>');
     }
 
     /**
@@ -62,7 +62,7 @@ trait CastArrayTypesTrait
      */
     public static function stringArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::string(...), $value, 'array<string>');
+        return self::handleArrayCast(TypeCast::string(...), $value, 'array<string>');
     }
 
     /**
@@ -72,7 +72,7 @@ trait CastArrayTypesTrait
      */
     public static function arrayArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::array(...), $value, 'array<array>');
+        return self::handleArrayCast(TypeCast::array(...), $value, 'array<array>');
     }
 
     /**
@@ -82,7 +82,7 @@ trait CastArrayTypesTrait
      */
     public static function listArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::list(...), $value, 'array<list>');
+        return self::handleArrayCast(TypeCast::list(...), $value, 'array<list>');
     }
 
     /**
@@ -92,7 +92,7 @@ trait CastArrayTypesTrait
      */
     public static function objectArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::object(...), $value, 'array<object>');
+        return self::handleArrayCast(TypeCast::object(...), $value, 'array<object>');
     }
 
     /**
@@ -108,7 +108,7 @@ trait CastArrayTypesTrait
             throw InvalidClassException::createFromName($class);
         }
 
-        return self::handleArrayCast(static fn ($value) => Cast::instance($value, $class), $value, "array<$class>");
+        return self::handleArrayCast(static fn ($value) => TypeCast::instance($value, $class), $value, "array<$class>");
     }
 
     /**
@@ -118,7 +118,7 @@ trait CastArrayTypesTrait
      */
     public static function iterableArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::iterable(...), $value, 'array<iterable>');
+        return self::handleArrayCast(TypeCast::iterable(...), $value, 'array<iterable>');
     }
 
     /**
@@ -128,7 +128,7 @@ trait CastArrayTypesTrait
      */
     public static function resourceArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::resource(...), $value, 'array<resource>');
+        return self::handleArrayCast(TypeCast::resource(...), $value, 'array<resource>');
     }
 
     /**
@@ -138,13 +138,13 @@ trait CastArrayTypesTrait
      */
     public static function callableArray(mixed $value): array
     {
-        return self::handleArrayCast(Cast::callable(...), $value, 'array<callable>');
+        return self::handleArrayCast(TypeCast::callable(...), $value, 'array<callable>');
     }
 
     private static function handleArrayCast(\Closure $cast, mixed $value, string $expectedType): array
     {
         try {
-            $result = Cast::array($value);
+            $result = TypeCast::array($value);
 
             foreach ($result as $key => $item) {
                 $result[$key] = $cast($item);

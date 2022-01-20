@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\Cast;
+use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\CastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\Exception\TypeException;
@@ -65,17 +65,17 @@ class CastArrayTypesTest extends TypedTestCase
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        Cast::instanceArray([new CompliantClass()], CompliantTrait::class);
+        TypeCast::instanceArray([new CompliantClass()], CompliantTrait::class);
     }
 
     public function testWholeArrayIsReturned(): void
     {
-        $this->assertSame([0 => 1, 'foo' => 2, 3 => 3], Cast::intArray([0 => 1, 'foo' => 2, 3 => '3']));
+        $this->assertSame([0 => 1, 'foo' => 2, 3 => 3], TypeCast::intArray([0 => 1, 'foo' => 2, 3 => '3']));
     }
 
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sArray', $name);
-        return Cast::$name(...);
+        return TypeCast::$name(...);
     }
 }

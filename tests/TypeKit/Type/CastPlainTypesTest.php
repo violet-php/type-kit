@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\Cast;
+use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\CastException;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\Pcre\Regex;
@@ -42,22 +42,22 @@ class CastPlainTypesTest extends TypedTestCase
 
     public function testCastingTraversable(): void
     {
-        $this->assertSame([1, 2, 3, 4, 5], Cast::array((static fn () => yield from range(1, 5))()));
+        $this->assertSame([1, 2, 3, 4, 5], TypeCast::array((static fn () => yield from range(1, 5))()));
     }
 
     public function testCastingObject(): void
     {
-        $this->assertSame(['regex' => '//'], Cast::array(new Regex('//')));
+        $this->assertSame(['regex' => '//'], TypeCast::array(new Regex('//')));
     }
 
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        Cast::instance(new CompliantClass(), CompliantTrait::class);
+        TypeCast::instance(new CompliantClass(), CompliantTrait::class);
     }
 
     protected function formatCallback(string $name): \Closure
     {
-        return Cast::$name(...);
+        return TypeCast::$name(...);
     }
 }
