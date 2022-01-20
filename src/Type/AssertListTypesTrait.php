@@ -14,6 +14,11 @@ use Violet\TypeKit\Type;
  */
 trait AssertListTypesTrait
 {
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<null> $value
+     */
     public static function nullList(mixed $value): void
     {
         if (!Type::isNullList($value)) {
@@ -21,6 +26,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<bool> $value
+     */
     public static function boolList(mixed $value): void
     {
         if (!Type::isBoolList($value)) {
@@ -28,6 +38,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<int> $value
+     */
     public static function intList(mixed $value): void
     {
         if (!Type::isIntList($value)) {
@@ -35,6 +50,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<float> $value
+     */
     public static function floatList(mixed $value): void
     {
         if (!Type::isFloatList($value)) {
@@ -42,6 +62,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<string> $value
+     */
     public static function stringList(mixed $value): void
     {
         if (!Type::isStringList($value)) {
@@ -49,6 +74,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<array<mixed>> $value
+     */
     public static function arrayList(mixed $value): void
     {
         if (!Type::isArrayList($value)) {
@@ -56,6 +86,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<list<mixed>> $value
+     */
     public static function listList(mixed $value): void
     {
         if (!Type::isListList($value)) {
@@ -63,6 +98,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<object> $value
+     */
     public static function objectList(mixed $value): void
     {
         if (!Type::isObjectList($value)) {
@@ -70,6 +110,13 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @template T
+     * @param mixed $value
+     * @param class-string<T> $class
+     * @throws AssertException
+     * @psalm-assert list<T> $value
+     */
     public static function instanceList(mixed $value, string $class): void
     {
         if (!Type::isInstanceList($value, $class)) {
@@ -77,6 +124,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<iterable<mixed>> $value
+     */
     public static function iterableList(mixed $value): void
     {
         if (!Type::isIterableList($value)) {
@@ -84,6 +136,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<resource> $value
+     */
     public static function resourceList(mixed $value): void
     {
         if (!Type::isResourceList($value)) {
@@ -91,6 +148,11 @@ trait AssertListTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert list<callable> $value
+     */
     public static function callableList(mixed $value): void
     {
         if (!Type::isCallableList($value)) {

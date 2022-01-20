@@ -17,7 +17,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return null
-     * @throws TypeException If the provided value is not null
+     * @throws TypeException
      */
     public static function null(mixed $value): mixed
     {
@@ -27,7 +27,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return bool
-     * @throws TypeException If the provided value is not bool
+     * @throws TypeException
      */
     public static function bool(mixed $value): bool
     {
@@ -37,7 +37,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return int
-     * @throws TypeException If the provided value is not int
+     * @throws TypeException
      */
     public static function int(mixed $value): int
     {
@@ -47,7 +47,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return float
-     * @throws TypeException If the provided value is not float
+     * @throws TypeException
      */
     public static function float(mixed $value): float
     {
@@ -57,7 +57,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return string
-     * @throws TypeException If the provided value is not string
+     * @throws TypeException
      */
     public static function string(mixed $value): string
     {
@@ -67,7 +67,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return array<mixed>
-     * @throws TypeException If the provided value is not array
+     * @throws TypeException
      */
     public static function array(mixed $value): array
     {
@@ -77,7 +77,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return list<mixed>
-     * @throws TypeException If the provided value is not list
+     * @throws TypeException
      */
     public static function list(mixed $value): array
     {
@@ -89,7 +89,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return object
-     * @throws TypeException If the provided value is not object
+     * @throws TypeException
      */
     public static function object(mixed $value): object
     {
@@ -101,7 +101,7 @@ trait PlainTypesTrait
      * @param mixed $value
      * @param class-string<T> $class
      * @return T
-     * @throws TypeException If the provided value is not instance of the provided class
+     * @throws TypeException
      */
     public static function instance(mixed $value, string $class): object
     {
@@ -115,7 +115,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return iterable<mixed>
-     * @throws TypeException If the provided value is not iterable
+     * @throws TypeException
      */
     public static function iterable(mixed $value): iterable
     {
@@ -125,7 +125,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return resource
-     * @throws TypeException If the provided value is not resource
+     * @throws TypeException
      */
     public static function resource(mixed $value): mixed
     {
@@ -135,7 +135,7 @@ trait PlainTypesTrait
     /**
      * @param mixed $value
      * @return callable
-     * @throws TypeException If the provided value is not callable
+     * @throws TypeException
      */
     public static function callable(mixed $value): callable
     {

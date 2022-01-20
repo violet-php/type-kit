@@ -14,6 +14,11 @@ use Violet\TypeKit\Type;
  */
 trait AssertArrayTypesTrait
 {
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<null> $value
+     */
     public static function nullArray(mixed $value): void
     {
         if (!Type::isNullArray($value)) {
@@ -21,6 +26,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<bool> $value
+     */
     public static function boolArray(mixed $value): void
     {
         if (!Type::isBoolArray($value)) {
@@ -28,6 +38,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<int> $value
+     */
     public static function intArray(mixed $value): void
     {
         if (!Type::isIntArray($value)) {
@@ -35,6 +50,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<float> $value
+     */
     public static function floatArray(mixed $value): void
     {
         if (!Type::isFloatArray($value)) {
@@ -42,6 +62,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<string> $value
+     */
     public static function stringArray(mixed $value): void
     {
         if (!Type::isStringArray($value)) {
@@ -49,6 +74,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<array<mixed>> $value
+     */
     public static function arrayArray(mixed $value): void
     {
         if (!Type::isArrayArray($value)) {
@@ -56,6 +86,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<list<mixed>> $value
+     */
     public static function listArray(mixed $value): void
     {
         if (!Type::isListArray($value)) {
@@ -63,6 +98,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<object> $value
+     */
     public static function objectArray(mixed $value): void
     {
         if (!Type::isObjectArray($value)) {
@@ -70,6 +110,13 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @template T
+     * @param mixed $value
+     * @param class-string<T> $class
+     * @throws AssertException
+     * @psalm-assert array<T> $value
+     */
     public static function instanceArray(mixed $value, string $class): void
     {
         if (!Type::isInstanceArray($value, $class)) {
@@ -77,6 +124,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<iterable<mixed>> $value
+     */
     public static function iterableArray(mixed $value): void
     {
         if (!Type::isIterableArray($value)) {
@@ -84,6 +136,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<resource> $value
+     */
     public static function resourceArray(mixed $value): void
     {
         if (!Type::isResourceArray($value)) {
@@ -91,6 +148,11 @@ trait AssertArrayTypesTrait
         }
     }
 
+    /**
+     * @param mixed $value
+     * @throws AssertException
+     * @psalm-assert array<callable> $value
+     */
     public static function callableArray(mixed $value): void
     {
         if (!Type::isCallableArray($value)) {

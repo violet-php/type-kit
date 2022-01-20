@@ -13,31 +13,61 @@ use Violet\TypeKit\Exception\InvalidClassException;
  */
 trait CastPlainTypesTrait
 {
+    /**
+     * @param mixed $value
+     * @return null
+     * @throws CastException
+     */
     public static function null(mixed $value): mixed
     {
         return self::handlePlainCast(static fn (): mixed => null, $value, 'null');
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     * @throws CastException
+     */
     public static function bool(mixed $value): bool
     {
         return self::handlePlainCast(static fn (): bool => $value, $value, 'bool');
     }
 
+    /**
+     * @param mixed $value
+     * @return int
+     * @throws CastException
+     */
     public static function int(mixed $value): int
     {
         return self::handlePlainCast(static fn (): int => $value, $value, 'int');
     }
 
+    /**
+     * @param mixed $value
+     * @return float
+     * @throws CastException
+     */
     public static function float(mixed $value): float
     {
         return self::handlePlainCast(static fn (): float => $value, $value, 'float');
     }
 
+    /**
+     * @param mixed $value
+     * @return string
+     * @throws CastException
+     */
     public static function string(mixed $value): string
     {
         return self::handlePlainCast(static fn (): string => $value, $value, 'string');
     }
 
+    /**
+     * @param mixed $value
+     * @return array<mixed>
+     * @throws CastException
+     */
     public static function array(mixed $value): array
     {
         if ($value instanceof \Traversable) {
@@ -51,16 +81,33 @@ trait CastPlainTypesTrait
         return self::handlePlainCast(static fn (): array => $value, $value, 'array');
     }
 
+    /**
+     * @param mixed $value
+     * @return list<mixed>
+     * @throws CastException
+     */
     public static function list(mixed $value): array
     {
         return self::handlePlainCast(static fn (): array => array_values(self::array($value)), $value, 'list');
     }
 
+    /**
+     * @param mixed $value
+     * @return object
+     * @throws CastException
+     */
     public static function object(mixed $value): object
     {
         return self::handlePlainCast(static fn (): object => $value, $value, 'object');
     }
 
+    /**
+     * @template T
+     * @param mixed $value
+     * @param class-string<T> $class
+     * @return T
+     * @throws CastException
+     */
     public static function instance(mixed $value, string $class): object
     {
         if (!class_exists($class) && !interface_exists($class)) {
@@ -76,11 +123,21 @@ trait CastPlainTypesTrait
         return $result;
     }
 
+    /**
+     * @param mixed $value
+     * @return iterable<mixed>
+     * @throws CastException
+     */
     public static function iterable(mixed $value): array
     {
         return self::handlePlainCast(static fn (): iterable => $value, $value, 'iterable');
     }
 
+    /**
+     * @param mixed $value
+     * @return resource
+     * @throws CastException
+     */
     public static function resource(mixed $value): mixed
     {
         return \is_resource($value)
@@ -88,6 +145,11 @@ trait CastPlainTypesTrait
             : throw CastException::createFromMessage($value, 'resource', 'Cannot cast other types to resources');
     }
 
+    /**
+     * @param mixed $value
+     * @return callable
+     * @throws CastException
+     */
     public static function callable(mixed $value): callable
     {
         return self::handlePlainCast(static fn (): callable => $value, $value, 'callable');
