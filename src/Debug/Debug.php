@@ -49,12 +49,11 @@ class Debug
      */
     public static function getCallerBacktrace(array $ignoredClasses = []): array
     {
-        $ignoredClasses[] = self::class;
-        $trace = self::getBacktrace();
+        $trace = \array_slice(self::getBacktrace(), 2);
 
         do {
             $top = array_shift($trace);
-        } while (\count($trace) > 0 && self::shouldIgnoreFrame($trace[0], $ignoredClasses));
+        } while ($trace !== [] && self::shouldIgnoreFrame($trace[0], $ignoredClasses));
 
         while ($top->isInternal()) {
             $top = array_shift($trace);

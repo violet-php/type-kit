@@ -40,6 +40,7 @@ class AssertArrayTypesTest extends TypedTestCase
 
         $this->expectException(TypeAssertException::class);
         $this->expectExceptionMessageMatches($pattern);
+        $this->expectExceptionCode(0);
 
         $callback($value);
     }

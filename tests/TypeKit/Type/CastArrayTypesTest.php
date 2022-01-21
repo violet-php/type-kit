@@ -44,6 +44,7 @@ class CastArrayTypesTest extends TypedTestCase
             );
 
             $this->assertMatchesRegularExpression($pattern, $exception->getMessage());
+            $this->assertSame(0, $exception->getCode());
         }
     }
 
@@ -59,6 +60,7 @@ class CastArrayTypesTest extends TypedTestCase
             );
 
             $this->assertMatchesRegularExpression($pattern, $exception->getMessage());
+            $this->assertSame(0, $exception->getCode());
         }
     }
 

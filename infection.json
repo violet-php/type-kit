@@ -7,5 +7,9 @@
     },
     "mutators": {
         "@default": true
+    },
+    "logs": {
+        "text": "build/infection.txt",
+        "html": "build/infection.html"
     }
 }

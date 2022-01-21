@@ -36,6 +36,7 @@ class CastListTypesTest extends TypedTestCase
             );
 
             $this->assertMatchesRegularExpression($pattern, $exception->getMessage());
+            $this->assertSame(0, $exception->getCode());
         }
     }
 
@@ -51,6 +52,7 @@ class CastListTypesTest extends TypedTestCase
             );
 
             $this->assertMatchesRegularExpression($pattern, $exception->getMessage());
+            $this->assertSame(0, $exception->getCode());
         }
     }
 

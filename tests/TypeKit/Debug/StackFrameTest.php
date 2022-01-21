@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace TypeKit\Debug;
 
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Runner\BaseTestRunner;
+use PHPUnit\TextUI\Command;
+use PHPUnit\TextUI\TestRunner;
 use Violet\TypeKit\Debug\Debug;
 use Violet\TypeKit\Debug\StackFrame;
 
@@ -28,7 +34,6 @@ class StackFrameTest extends TestCase
     public function testIncludingOnlyArgs(): void
     {
         $trace = $this->filterIncludes(Debug::getBacktrace(includeArguments: true));
-        $nulls = array_fill(0, \count($trace), null);
 
         $this->assertSame(array_fill(0, \count($trace), null), array_column($trace, 'object'));
         $this->assertNotSame(array_fill(0, \count($trace), []), array_column($trace, 'args'));
@@ -134,6 +139,16 @@ class StackFrameTest extends TestCase
                 'args' => ['bar', 'named' => 321],
             ]))
         );
+    }
+
+    public function testDefaultLineValue(): void
+    {
+        $this->assertSame(-1, (new StackFrame([]))->line);
+    }
+
+    public function testCallerBacktraceIsValid(): void
+    {
+        $this->assertCount(\count(debug_backtrace()), Debug::getCallerBacktrace());
     }
 
     private function filterIncludes(array $trace): array

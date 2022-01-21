@@ -34,6 +34,7 @@ class PlainTypesTest extends TypedTestCase
 
         $this->expectException(TypeException::class);
         $this->expectExceptionMessageMatches($pattern);
+        $this->expectExceptionCode(0);
 
         $callback($value);
     }
