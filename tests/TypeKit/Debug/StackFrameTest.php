@@ -13,7 +13,7 @@ use Violet\TypeKit\Debug\StackFrame;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class TraceTest extends TestCase
+class StackFrameTest extends TestCase
 {
     private const INCLUDE_FUNCTIONS = ['include', 'include_once', 'require', 'require_once'];
 
@@ -82,6 +82,58 @@ class TraceTest extends TestCase
         $this->assertTrue((new StackFrame([]))->isInternal());
         $this->assertFalse((new StackFrame(['file' => __FILE__, 'line' => __LINE__]))->isInternal());
         $this->assertFalse((new StackFrame(['file' => __FILE__]))->isInternal());
+    }
+
+    public function testHasArguments(): void
+    {
+        $this->assertTrue((new StackFrame(['args' => ['foo']]))->hasArguments());
+        $this->assertTrue((new StackFrame(['args' => []]))->hasArguments());
+        $this->assertFalse((new StackFrame([]))->hasArguments());
+    }
+
+    public function testStackFrameToString(): void
+    {
+        $this->assertSame(
+            '/test/foo.php(123): Class::func(string, int)',
+            (string)(new StackFrame([
+                'file' => '/test/foo.php',
+                'line' => 123,
+                'class' => 'Class',
+                'type' => '::',
+                'function' => 'func',
+                'args' => ['bar', 321],
+            ]))
+        );
+
+        $this->assertSame(
+            '[internal function]: Class::func(string, int)',
+            (string)(new StackFrame([
+                'class' => 'Class',
+                'type' => '::',
+                'function' => 'func',
+                'args' => ['bar', 321],
+            ]))
+        );
+
+        $this->assertSame(
+            '/test/foo.php(123): func(string, int)',
+            (string)(new StackFrame([
+                'file' => '/test/foo.php',
+                'line' => 123,
+                'function' => 'func',
+                'args' => ['bar', 321],
+            ]))
+        );
+
+        $this->assertSame(
+            '/test/foo.php(123): func(string, named: int)',
+            (string)(new StackFrame([
+                'file' => '/test/foo.php',
+                'line' => 123,
+                'function' => 'func',
+                'args' => ['bar', 'named' => 321],
+            ]))
+        );
     }
 
     private function filterIncludes(array $trace): array
