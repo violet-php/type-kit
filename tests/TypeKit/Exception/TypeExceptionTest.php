@@ -28,7 +28,6 @@ class TypeExceptionTest extends TestCase
         $line = __LINE__ + 1;
         $result = \call_user_func(array_map(...), TypeException::createFromValue(...), [1], ['string']);
 
-        $this->assertIsArray($result);
         $this->assertInstanceOf(TypeException::class, $result[0]);
         $this->assertSame(__FILE__, $result[0]->getFile());
         $this->assertSame($line, $result[0]->getLine());

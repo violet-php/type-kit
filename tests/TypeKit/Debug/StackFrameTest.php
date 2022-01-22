@@ -151,6 +151,10 @@ class StackFrameTest extends TestCase
         $this->assertCount(\count(debug_backtrace()), Debug::getCallerBacktrace());
     }
 
+    /**
+     * @param array<StackFrame> $trace
+     * @return list<StackFrame>
+     */
     private function filterIncludes(array $trace): array
     {
         return array_values(array_filter(

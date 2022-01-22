@@ -63,7 +63,7 @@ abstract class TypedTestCase extends TestCase
         $callback = $this->formatCallback($type);
 
         return \count($arguments) > 0
-            ? static fn (mixed $value) => $callback($value, ... $arguments)
+            ? static fn (mixed $value): mixed => $callback($value, ... $arguments)
             : $callback;
     }
 

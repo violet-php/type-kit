@@ -50,6 +50,6 @@ class ConditionalArrayTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('is%sArray', ucfirst($name));
-        return Type::$name(...);
+        return \Closure::fromCallable([Type::class, $name]);
     }
 }

@@ -62,6 +62,6 @@ class AssertListTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sList', $name);
-        return TypeAssert::$name(...);
+        return \Closure::fromCallable([TypeAssert::class, $name]);
     }
 }

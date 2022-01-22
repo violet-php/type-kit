@@ -62,6 +62,6 @@ class ListTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sList', $name);
-        return Type::$name(...);
+        return \Closure::fromCallable([Type::class, $name]);
     }
 }

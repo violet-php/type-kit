@@ -47,6 +47,6 @@ class AssertPlainTypesTest extends TypedTestCase
 
     protected function formatCallback(string $name): \Closure
     {
-        return TypeAssert::$name(...);
+        return \Closure::fromCallable([TypeAssert::class, $name]);
     }
 }

@@ -32,4 +32,9 @@ class TypeCastException extends InvalidTypeException
             $message
         ));
     }
+
+    public static function createFromInvalidType(mixed $value, string $expectedType): self
+    {
+        return self::createFromMessage($value, $expectedType, 'Type cannot be cast to ' . $expectedType);
+    }
 }

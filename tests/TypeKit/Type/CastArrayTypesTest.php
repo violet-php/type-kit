@@ -78,6 +78,6 @@ class CastArrayTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sArray', $name);
-        return TypeCast::$name(...);
+        return \Closure::fromCallable([TypeCast::class, $name]);
     }
 }
