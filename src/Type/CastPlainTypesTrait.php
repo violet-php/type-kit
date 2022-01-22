@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\Debug\ErrorHandler;
@@ -78,7 +80,7 @@ trait CastPlainTypesTrait
                 throw TypeCastException::createFromMessage($value, 'int', 'Not a numeric string');
             }
 
-            $result = $value + 0;
+            $result = $value * 1;
 
             if (\is_int($result)) {
                 return $result;
@@ -130,7 +132,7 @@ trait CastPlainTypesTrait
                 throw TypeCastException::createFromMessage($value, 'float', 'Not a numeric string');
             }
 
-            $result = $value + 0;
+            $result = $value * 1;
 
             if (\is_float($result)) {
                 return $result;
