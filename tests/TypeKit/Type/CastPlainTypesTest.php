@@ -183,7 +183,7 @@ class CastPlainTypesTest extends TypedTestCase
 
     public function testFailureOnIteration(): void
     {
-        $object = new class implements \IteratorAggregate {
+        $object = new class () implements \IteratorAggregate {
             public function getIterator(): Traversable
             {
                 throw new \RuntimeException('test error');

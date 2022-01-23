@@ -93,7 +93,7 @@ trait AssertPlainTypesTrait
      */
     public static function list(mixed $value): void
     {
-        if (!\is_array($value) || !array_is_list($value)) {
+        if (!(\is_array($value) && array_is_list($value))) {
             throw TypeAssertException::createFromValue($value, 'list');
         }
     }
@@ -119,13 +119,15 @@ trait AssertPlainTypesTrait
      */
     public static function instance(mixed $value, string $class): void
     {
+        if ($value instanceof $class) {
+            return;
+        }
+
         if (!class_exists($class) && !interface_exists($class)) {
             throw InvalidClassException::createFromName($class);
         }
 
-        if (!$value instanceof $class) {
-            throw TypeAssertException::createFromValue($value, $class);
-        }
+        throw TypeAssertException::createFromValue($value, $class);
     }
 
     /**

@@ -57,6 +57,7 @@ class StackFrame
     {
         $arguments = [];
 
+        /** @var mixed $value */
         foreach ($this->args as $name => $value) {
             $arguments[] = \is_string($name)
                 ? sprintf('%s: %s', $name, Debug::describeType($value))

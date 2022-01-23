@@ -15,7 +15,7 @@ class TypeException extends InvalidTypeException
 {
     public static function createFromValue(mixed $value, string $expectedType): self
     {
-        return new static(
+        return new self(
             sprintf("Got unexpected value type '%s', was expecting '%s'", Debug::describeType($value), $expectedType)
         );
     }

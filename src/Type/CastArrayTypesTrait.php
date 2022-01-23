@@ -108,7 +108,11 @@ trait CastArrayTypesTrait
             throw InvalidClassException::createFromName($class);
         }
 
-        return self::handleArrayCast(static fn ($value) => TypeCast::instance($value, $class), $value, "array<$class>");
+        return self::handleArrayCast(
+            static fn (mixed $value) => TypeCast::instance($value, $class),
+            $value,
+            "array<$class>"
+        );
     }
 
     /**
@@ -141,13 +145,23 @@ trait CastArrayTypesTrait
         return self::handleArrayCast(TypeCast::callable(...), $value, 'array<callable>');
     }
 
+    /**
+     * @template T
+     * @param \Closure(mixed):T $callback
+     * @param mixed $value
+     * @param string $expectedType
+     * @return array<T>
+     */
     private static function handleArrayCast(\Closure $cast, mixed $value, string $expectedType): array
     {
         try {
             $result = TypeCast::array($value);
 
+            /** @var mixed $item */
             foreach ($result as $key => $item) {
-                $result[$key] = $cast($item);
+                /** @var T $new */
+                $new = $cast($item);
+                $result[$key] = $new;
             }
 
             return $result;

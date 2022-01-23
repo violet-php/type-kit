@@ -11,5 +11,4 @@ namespace Violet\TypeKit\PhpUnit;
  */
 trait CompliantTrait
 {
-
 }

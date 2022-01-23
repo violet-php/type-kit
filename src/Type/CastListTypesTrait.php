@@ -108,7 +108,11 @@ trait CastListTypesTrait
             throw InvalidClassException::createFromName($class);
         }
 
-        return self::handleListCast(static fn ($value) => TypeCast::instance($value, $class), $value, "list<$class>");
+        return self::handleListCast(
+            static fn (mixed $value) => TypeCast::instance($value, $class),
+            $value,
+            "list<$class>"
+        );
     }
 
     /**
@@ -141,13 +145,23 @@ trait CastListTypesTrait
         return self::handleListCast(TypeCast::callable(...), $value, 'list<callable>');
     }
 
+    /**
+     * @template T
+     * @param \Closure(mixed):T $callback
+     * @param mixed $value
+     * @param string $expectedType
+     * @return list<T>
+     */
     private static function handleListCast(\Closure $cast, mixed $value, string $expectedType): array
     {
         try {
             $result = array_values(TypeCast::array($value));
 
+            /** @var mixed $item */
             foreach ($result as $key => $item) {
-                $result[$key] = $cast($item);
+                /** @var T $new */
+                $new = $cast($item);
+                $result[$key] = $new;
             }
 
             return $result;

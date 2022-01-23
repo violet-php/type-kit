@@ -105,11 +105,15 @@ trait PlainTypesTrait
      */
     public static function instance(mixed $value, string $class): object
     {
+        if ($value instanceof $class) {
+            return $value;
+        }
+
         if (!class_exists($class) && !interface_exists($class)) {
             throw InvalidClassException::createFromName($class);
         }
 
-        return $value instanceof $class ? $value : throw TypeException::createFromValue($value, $class);
+        throw TypeException::createFromValue($value, $class);
     }
 
     /**
