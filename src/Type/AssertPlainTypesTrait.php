@@ -93,7 +93,7 @@ trait AssertPlainTypesTrait
      */
     public static function list(mixed $value): void
     {
-        if (!(\is_array($value) && array_is_list($value))) {
+        if (!\is_array($value) || !array_is_list($value)) {
             throw TypeAssertException::createFromValue($value, 'list');
         }
     }

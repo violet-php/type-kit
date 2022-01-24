@@ -50,6 +50,6 @@ class ConditionalListTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('is%sList', ucfirst($name));
-        return \Closure::fromCallable([Type::class, $name]);
+        return Type::$name(...);
     }
 }

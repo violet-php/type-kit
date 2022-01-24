@@ -47,6 +47,6 @@ class PlainTypesTest extends TypedTestCase
 
     protected function formatCallback(string $name): \Closure
     {
-        return \Closure::fromCallable([Type::class, $name]);
+        return Type::$name(...);
     }
 }

@@ -61,6 +61,6 @@ class AssertArrayTypesTest extends TypedTestCase
     protected function formatCallback(string $name): \Closure
     {
         $name = sprintf('%sArray', $name);
-        return \Closure::fromCallable([TypeAssert::class, $name]);
+        return TypeAssert::$name(...);
     }
 }

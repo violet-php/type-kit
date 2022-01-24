@@ -145,7 +145,7 @@ trait ConditionalArrayTypesTrait
         }
 
         foreach ($value as $item) {
-            if (!(\is_array($item) && array_is_list($item))) {
+            if (!\is_array($item) || !array_is_list($item)) {
                 return false;
             }
         }

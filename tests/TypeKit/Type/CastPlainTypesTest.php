@@ -309,6 +309,6 @@ class CastPlainTypesTest extends TypedTestCase
 
     protected function formatCallback(string $name): \Closure
     {
-        return \Closure::fromCallable([TypeCast::class, $name]);
+        return TypeCast::$name(...);
     }
 }
