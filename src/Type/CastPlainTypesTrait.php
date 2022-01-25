@@ -247,7 +247,7 @@ trait CastPlainTypesTrait
     }
 
     /**
-     * @template T
+     * @template T of object
      * @param mixed $value
      * @param class-string<T> $class
      * @return T

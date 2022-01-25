@@ -17,6 +17,9 @@ use Violet\TypeKit\PhpUnit\NonCompliantClass;
  */
 abstract class TypedTestCase extends TestCase
 {
+    /**
+     * @return array<array{\Closure, mixed}>
+     */
     public function getValidValuesTestCases(): array
     {
         return [
@@ -38,6 +41,9 @@ abstract class TypedTestCase extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{\Closure, mixed, string}>
+     */
     public function getInvalidValuesTestCases(): array
     {
         return [
@@ -58,6 +64,11 @@ abstract class TypedTestCase extends TestCase
         ];
     }
 
+    /**
+     * @param string $type
+     * @param array<mixed> $arguments
+     * @return \Closure
+     */
     private function makeCall(string $type, array $arguments = []): \Closure
     {
         $callback = $this->formatCallback($type);

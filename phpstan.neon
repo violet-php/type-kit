@@ -7,3 +7,9 @@ parameters:
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
+
+services:
+	-
+		class: Violet\TypeKit\PhpStan\TypeExtension
+		tags:
+			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension

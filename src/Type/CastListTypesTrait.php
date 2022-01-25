@@ -96,7 +96,7 @@ trait CastListTypesTrait
     }
 
     /**
-     * @template T
+     * @template T of object
      * @param mixed $value
      * @param class-string<T> $class
      * @return list<T>
@@ -147,7 +147,7 @@ trait CastListTypesTrait
 
     /**
      * @template T
-     * @param \Closure(mixed):T $callback
+     * @param \Closure(mixed):T $cast
      * @param mixed $value
      * @param string $expectedType
      * @return list<T>
@@ -159,7 +159,6 @@ trait CastListTypesTrait
 
             /** @var mixed $item */
             foreach ($result as $key => $item) {
-                /** @var T $new */
                 $new = $cast($item);
                 $result[$key] = $new;
             }
