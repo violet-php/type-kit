@@ -28,16 +28,20 @@ abstract class TypedTestCase extends TestCase
             [$this->makeCall('int'), 1],
             [$this->makeCall('float'), 1.1],
             [$this->makeCall('string'), 'foobar'],
+            [$this->makeCall('array'), []],
             [$this->makeCall('array'), [1]],
+            [$this->makeCall('array'), [1, 2, 3]],
             [$this->makeCall('array'), ['foo' => 'bar']],
+            [$this->makeCall('list'), []],
             [$this->makeCall('list'), [1]],
+            [$this->makeCall('list'), [1, 2, 3]],
             [$this->makeCall('object'), new CompliantClass()],
             [$this->makeCall('instance', [CompliantClass::class]), new CompliantClass()],
             [$this->makeCall('instance', [AbstractCompliantClass::class]), new CompliantClass()],
             [$this->makeCall('instance', [CompliantInterface::class]), new CompliantClass()],
             [$this->makeCall('iterable'), [1]],
             [$this->makeCall('resource'), tmpfile()],
-            [$this->makeCall('callable'), strlen(...)],
+            [$this->makeCall('callable'), 'strlen'],
         ];
     }
 
@@ -71,7 +75,7 @@ abstract class TypedTestCase extends TestCase
      */
     private function makeCall(string $type, array $arguments = []): \Closure
     {
-        $callback = $this->formatCallback($type)(...);
+        $callback = \Closure::fromCallable($this->formatCallback($type));
 
         return \count($arguments) > 0
             ? static fn (mixed $value): mixed => $callback($value, ... $arguments)

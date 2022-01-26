@@ -21,7 +21,7 @@ class TypeAsArrayTypesTest extends TypedTestCase
     /** @dataProvider getValidValuesTestCases */
     public function testValidValues(\Closure $callback, mixed $value): void
     {
-        $this->assertSame([$value], $callback([$value]));
+        $this->assertSame([$value, $value], $callback([$value, $value]));
     }
 
     /** @dataProvider getValidValuesTestCases */

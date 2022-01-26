@@ -14,7 +14,7 @@ class Debug
     public static function describeType(mixed $value): string
     {
         if (\is_array($value)) {
-            $types = array_map(get_debug_type(...), $value);
+            $types = array_map('get_debug_type', $value);
             $type = array_is_list($value) ? 'list' : 'array';
             return sprintf('%s<%s>', $type, implode('|', array_unique($types)));
         }
