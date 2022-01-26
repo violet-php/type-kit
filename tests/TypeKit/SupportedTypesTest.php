@@ -13,6 +13,13 @@ use PHPUnit\Framework\TestCase;
  */
 class SupportedTypesTest extends TestCase
 {
+    private const SUPPORTED_CLASSES = [
+        TypeAs::class,
+        TypeAssert::class,
+        TypeCast::class,
+        TypeIs::class,
+    ];
+
     private const SUPPORTED_TYPES = [
         'null',
         'bool',
@@ -28,31 +35,28 @@ class SupportedTypesTest extends TestCase
         'callable',
     ];
 
-    private const TYPE_METHODS = [
-        [Type::class, '%s'],
-        [Type::class, '%sArray'],
-        [Type::class, '%sList'],
-        [Type::class, 'is%sArray'],
-        [Type::class, 'is%sList'],
-        [TypeAssert::class, '%s'],
-        [TypeAssert::class, '%sArray'],
-        [TypeAssert::class, '%sList'],
-        [TypeCast::class, '%s'],
-        [TypeCast::class, '%sArray'],
-        [TypeCast::class, '%sList'],
+    private const SUPPORTED_VARIANTS = [
+        '%s',
+        '%sArray',
+        '%sList',
     ];
 
     public function testAllTypesAreSupported(): void
     {
-        foreach (self::SUPPORTED_TYPES as $type) {
-            $upperName = ucfirst($type);
+        foreach (self::SUPPORTED_CLASSES as $class) {
+            $reflection = new \ReflectionClass($class);
 
-            foreach (self::TYPE_METHODS as [$class, $format]) {
-                $method = lcfirst(sprintf($format, $upperName));
-                $class = new \ReflectionClass($class);
+            foreach (self::SUPPORTED_TYPES as $type) {
+                foreach (self::SUPPORTED_VARIANTS as $format) {
+                    $method = sprintf($format, $type);
 
-                $this->assertTrue($class->hasMethod($method));
-                $this->assertSame($method, $class->getMethod($method)->getName());
+                    $this->assertTrue(
+                        $reflection->hasMethod($method),
+                        "Failed asserting that $class has method $method"
+                    );
+
+                    $this->assertSame($method, $reflection->getMethod($method)->getName());
+                }
             }
         }
     }

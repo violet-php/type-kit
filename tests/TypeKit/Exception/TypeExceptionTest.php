@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Exception;
 
 use PHPUnit\Framework\TestCase;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
@@ -39,7 +39,7 @@ class TypeExceptionTest extends TestCase
 
         try {
             $line = __LINE__ + 1;
-            Type::string(1);
+            TypeAs::string(1);
             $this->fail('Failed to throw expected exception');
         } catch (TypeException $exception) {
             $this->assertSame(__FILE__, $exception->getFile());

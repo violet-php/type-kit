@@ -6,7 +6,7 @@ namespace Violet\TypeKit\Pcre;
 
 use Violet\TypeKit\Debug\ErrorHandler;
 use Violet\TypeKit\Exception\PcreException;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
@@ -97,7 +97,7 @@ class Regex
 
     public function replace(string $replacement, string $subject, int $limit = self::NO_LIMIT): string
     {
-        return Type::string($this->call(fn () => preg_replace($this->regex, $replacement, $subject, $limit)));
+        return TypeAs::string($this->call(fn () => preg_replace($this->regex, $replacement, $subject, $limit)));
     }
 
     /**
@@ -108,7 +108,7 @@ class Regex
      */
     public function replaceCallback(\Closure $callback, string $subject, int $limit = self::NO_LIMIT): string
     {
-        return Type::string($this->call(fn () => preg_replace_callback($this->regex, $callback, $subject, $limit)));
+        return TypeAs::string($this->call(fn () => preg_replace_callback($this->regex, $callback, $subject, $limit)));
     }
 
     /**
@@ -118,7 +118,7 @@ class Regex
      */
     public function split(string $subject, int $limit = self::NO_LIMIT): array
     {
-        return Type::stringList($this->call(fn () => preg_split($this->regex, $subject, $limit)));
+        return TypeAs::stringList($this->call(fn () => preg_split($this->regex, $subject, $limit)));
     }
 
     /**
@@ -127,7 +127,7 @@ class Regex
      */
     public function grep(array $subjects): array
     {
-        return Type::stringArray($this->call(fn () => preg_grep($this->regex, $subjects)));
+        return TypeAs::stringArray($this->call(fn () => preg_grep($this->regex, $subjects)));
     }
 
     /**
@@ -136,7 +136,7 @@ class Regex
      */
     public function reject(array $subjects): array
     {
-        return Type::stringArray($this->call(fn () => preg_grep($this->regex, $subjects, PREG_GREP_INVERT)));
+        return TypeAs::stringArray($this->call(fn () => preg_grep($this->regex, $subjects, PREG_GREP_INVERT)));
     }
 
     /**

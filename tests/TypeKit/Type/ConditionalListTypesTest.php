@@ -7,8 +7,9 @@ namespace Violet\TypeKit\Type;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypedTestCase;
+use Violet\TypeKit\TypeIs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
@@ -44,12 +45,11 @@ class ConditionalListTypesTest extends TypedTestCase
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        Type::isInstanceList([new CompliantClass()], CompliantTrait::class);
+        TypeIs::instanceList([new CompliantClass()], CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('is%sList', ucfirst($name));
-        return Type::$name(...);
+        return [TypeIs::class, sprintf('%sList', $name)];
     }
 }

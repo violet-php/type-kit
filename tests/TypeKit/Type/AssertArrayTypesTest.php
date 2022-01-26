@@ -58,9 +58,8 @@ class AssertArrayTypesTest extends TypedTestCase
         TypeAssert::instanceArray([new CompliantClass()], CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('%sArray', $name);
-        return TypeAssert::$name(...);
+        return [TypeAssert::class, sprintf('%sArray', $name)];
     }
 }

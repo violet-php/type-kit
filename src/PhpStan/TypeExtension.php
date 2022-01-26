@@ -32,7 +32,7 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
 
     public function getClass(): string
     {
-        return TypeKit\Type::class;
+        return TypeKit\TypeAs::class;
     }
 
     public function isStaticMethodSupported(

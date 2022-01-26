@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Exception;
 
 use Violet\TypeKit\Debug\Debug;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypeAssert;
 use Violet\TypeKit\TypeCast;
 
@@ -18,7 +18,7 @@ class InvalidTypeException extends \UnexpectedValueException implements TypeKitE
 {
     private const IGNORED_CLASSES = [
         self::class,
-        Type::class,
+        TypeAs::class,
         TypeAssert::class,
         TypeCast::class,
     ];

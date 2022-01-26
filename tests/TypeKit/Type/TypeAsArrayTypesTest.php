@@ -8,7 +8,7 @@ use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\Exception\TypeException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -16,7 +16,7 @@ use Violet\TypeKit\TypedTestCase;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ListTypesTest extends TypedTestCase
+class TypeAsArrayTypesTest extends TypedTestCase
 {
     /** @dataProvider getValidValuesTestCases */
     public function testValidValues(\Closure $callback, mixed $value): void
@@ -24,11 +24,17 @@ class ListTypesTest extends TypedTestCase
         $this->assertSame([$value], $callback([$value]));
     }
 
+    /** @dataProvider getValidValuesTestCases */
+    public function testValidValuesMap(\Closure $callback, mixed $value): void
+    {
+        $this->assertSame(['foobar' => $value], $callback(['foobar' => $value]));
+    }
+
     /** @dataProvider getInvalidValuesTestCases */
     public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         $pattern = sprintf(
-            "/Got unexpected value type '[^']+', was expecting 'list<%s>'/",
+            "/Got unexpected value type '[^']+', was expecting 'array<%s>'/",
             preg_quote($expectedType, '/')
         );
 
@@ -46,22 +52,14 @@ class ListTypesTest extends TypedTestCase
         $callback([$value]);
     }
 
-    /** @dataProvider getValidValuesTestCases */
-    public function testValidNonListValues(\Closure $callback, mixed $value): void
-    {
-        $this->expectException(TypeException::class);
-        $callback([1 => $value]);
-    }
-
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        Type::instanceList([new CompliantClass()], CompliantTrait::class);
+        TypeAs::instanceArray([new CompliantClass()], CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('%sList', $name);
-        return Type::$name(...);
+        return [TypeAs::class, sprintf('%sArray', $name)];
     }
 }

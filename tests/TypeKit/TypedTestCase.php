@@ -71,12 +71,16 @@ abstract class TypedTestCase extends TestCase
      */
     private function makeCall(string $type, array $arguments = []): \Closure
     {
-        $callback = $this->formatCallback($type);
+        $callback = $this->formatCallback($type)(...);
 
         return \count($arguments) > 0
             ? static fn (mixed $value): mixed => $callback($value, ... $arguments)
             : $callback;
     }
 
-    abstract protected function formatCallback(string $name): \Closure;
+    /**
+     * @param string $name
+     * @return callable
+     */
+    abstract protected function formatCallback(string $name): callable;
 }

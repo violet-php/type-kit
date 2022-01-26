@@ -16,18 +16,12 @@ use Violet\TypeKit\TypeIs;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ConditionalArrayTypesTest extends TypedTestCase
+class ConditionalPlainTypesTest extends TypedTestCase
 {
     /** @dataProvider getValidValuesTestCases */
     public function testValidValues(\Closure $callback, mixed $value): void
     {
-        $this->assertTrue($callback([$value]));
-    }
-
-    /** @dataProvider getValidValuesTestCases */
-    public function testValidValuesMap(\Closure $callback, mixed $value): void
-    {
-        $this->assertTrue($callback(['foobar' => $value]));
+        $this->assertTrue($callback($value));
     }
 
     /** @dataProvider getInvalidValuesTestCases */
@@ -36,20 +30,14 @@ class ConditionalArrayTypesTest extends TypedTestCase
         $this->assertFalse($callback($value));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
-    public function testInvalidItemValues(\Closure $callback, mixed $value): void
-    {
-        $this->assertFalse($callback([$value]));
-    }
-
     public function testInstanceDoesNotAcceptTrait(): void
     {
         $this->expectException(InvalidClassException::class);
-        TypeIs::instanceArray([new CompliantClass()], CompliantTrait::class);
+        TypeIs::instance([new CompliantClass()], CompliantTrait::class);
     }
 
     protected function formatCallback(string $name): callable
     {
-        return [TypeIs::class, sprintf('%sArray', $name)];
+        return [TypeIs::class, $name];
     }
 }

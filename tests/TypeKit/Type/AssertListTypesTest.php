@@ -59,9 +59,8 @@ class AssertListTypesTest extends TypedTestCase
         TypeAssert::instanceList([new CompliantClass()], CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('%sList', $name);
-        return TypeAssert::$name(...);
+        return [TypeAssert::class, sprintf('%sList', $name)];
     }
 }

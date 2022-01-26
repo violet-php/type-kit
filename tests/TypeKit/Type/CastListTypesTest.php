@@ -73,9 +73,8 @@ class CastListTypesTest extends TypedTestCase
         $this->assertSame([1, 2, 3], TypeCast::intList([0 => 1, 'foo' => 2, 3 => '3']));
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('%sList', $name);
-        return TypeCast::$name(...);
+        return [TypeCast::class, sprintf('%sList', $name)];
     }
 }

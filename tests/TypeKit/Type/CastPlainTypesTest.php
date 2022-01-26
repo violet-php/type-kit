@@ -307,8 +307,8 @@ class CastPlainTypesTest extends TypedTestCase
         }
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        return TypeCast::$name(...);
+        return [TypeCast::class, $name];
     }
 }

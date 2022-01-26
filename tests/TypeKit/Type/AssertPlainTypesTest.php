@@ -45,8 +45,8 @@ class AssertPlainTypesTest extends TypedTestCase
         TypeAssert::instance(new CompliantClass(), CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        return TypeAssert::$name(...);
+        return [TypeAssert::class, $name];
     }
 }

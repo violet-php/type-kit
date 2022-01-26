@@ -10,7 +10,7 @@ use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\Exception\TypeException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -75,9 +75,8 @@ class CastArrayTypesTest extends TypedTestCase
         $this->assertSame([0 => 1, 'foo' => 2, 3 => 3], TypeCast::intArray([0 => 1, 'foo' => 2, 3 => '3']));
     }
 
-    protected function formatCallback(string $name): \Closure
+    protected function formatCallback(string $name): callable
     {
-        $name = sprintf('%sArray', $name);
-        return TypeCast::$name(...);
+        return [TypeCast::class, sprintf('%sArray', $name)];
     }
 }

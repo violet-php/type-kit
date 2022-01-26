@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Debug;
 
-use Violet\TypeKit\Type;
+use Violet\TypeKit\TypeAs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
