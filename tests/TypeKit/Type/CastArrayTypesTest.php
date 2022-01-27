@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\TypedTestCase;
 

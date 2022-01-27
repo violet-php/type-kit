@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\TypeAssert;
-use Violet\TypeKit\Exception\TypeAssertException;
 use Violet\TypeKit\Exception\InvalidClassException;
+use Violet\TypeKit\Exception\TypeAssertException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;

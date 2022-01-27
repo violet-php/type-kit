@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Violet\TypeKit;
+namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\Debug\ErrorHandler;
 use Violet\TypeKit\Exception\InvalidClassException;

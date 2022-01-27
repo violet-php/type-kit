@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\Exception\TypeException;
-use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypedTestCase;
 
 /**

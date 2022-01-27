@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Exception;
 
 use Violet\TypeKit\Debug\Debug;
-use Violet\TypeKit\TypeAs;
-use Violet\TypeKit\TypeAssert;
-use Violet\TypeKit\TypeCast;
+use Violet\TypeKit\Type\TypeAs;
+use Violet\TypeKit\Type\TypeAssert;
+use Violet\TypeKit\Type\TypeCast;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>

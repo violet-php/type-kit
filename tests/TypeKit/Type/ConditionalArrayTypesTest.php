@@ -8,7 +8,6 @@ use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;
-use Violet\TypeKit\TypeIs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\PhpUnit\AbstractCompliantClass;
-use Violet\TypeKit\PhpUnit\CompliantInterface;
-use Violet\TypeKit\PhpUnit\NonCompliantClass;
-use Violet\TypeKit\TypeCast;
-use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\Exception\InvalidClassException;
+use Violet\TypeKit\Exception\TypeCastException;
+use Violet\TypeKit\PhpUnit\AbstractCompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantClass;
+use Violet\TypeKit\PhpUnit\CompliantInterface;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
+use Violet\TypeKit\PhpUnit\NonCompliantClass;
 use Violet\TypeKit\TypedTestCase;
 
 /**

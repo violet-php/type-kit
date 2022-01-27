@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Violet\TypeKit;
 
 use PHPUnit\Framework\TestCase;
+use Violet\TypeKit\Type\TypeAs;
+use Violet\TypeKit\Type\TypeAssert;
+use Violet\TypeKit\Type\TypeCast;
+use Violet\TypeKit\Type\TypeIs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>

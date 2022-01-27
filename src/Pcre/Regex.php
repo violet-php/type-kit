@@ -6,7 +6,7 @@ namespace Violet\TypeKit\Pcre;
 
 use Violet\TypeKit\Debug\ErrorHandler;
 use Violet\TypeKit\Exception\PcreException;
-use Violet\TypeKit\TypeAs;
+use Violet\TypeKit\Type\TypeAs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>

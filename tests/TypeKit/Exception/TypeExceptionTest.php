@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Exception;
 
 use PHPUnit\Framework\TestCase;
-use Violet\TypeKit\TypeAs;
+use Violet\TypeKit\Type\TypeAs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypedTestCase;
-use Violet\TypeKit\TypeIs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
