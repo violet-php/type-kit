@@ -4,13 +4,7 @@ declare(strict_types=1);
 
 namespace TypeKit\Debug;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\TestResult;
-use PHPUnit\Framework\TestSuite;
-use PHPUnit\Runner\BaseTestRunner;
-use PHPUnit\TextUI\Command;
-use PHPUnit\TextUI\TestRunner;
 use Violet\TypeKit\Debug\Debug;
 use Violet\TypeKit\Debug\StackFrame;
 

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use PHPUnit\Framework\TestCase;
-use Traversable;
 use Violet\TypeKit\PhpUnit\AbstractCompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantInterface;
 use Violet\TypeKit\PhpUnit\NonCompliantClass;
 use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\Exception\InvalidClassException;
-use Violet\TypeKit\Pcre\Regex;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;
@@ -307,7 +304,7 @@ class CastPlainTypesTest extends TypedTestCase
         }
     }
 
-    protected function formatCallback(string $name): callable
+    protected function formatCallback(string $name): array
     {
         return [TypeCast::class, $name];
     }

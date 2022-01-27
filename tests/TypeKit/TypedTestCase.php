@@ -75,7 +75,13 @@ abstract class TypedTestCase extends TestCase
      */
     private function makeCall(string $type, array $arguments = []): \Closure
     {
-        $callback = \Closure::fromCallable($this->formatCallback($type));
+        $callback = $this->formatCallback($type);
+
+        if (!\is_callable($callback)) {
+            $this->fail('Got unexpected return value from formatCallback()');
+        }
+
+        $callback = \Closure::fromCallable($callback);
 
         return \count($arguments) > 0
             ? static fn (mixed $value): mixed => $callback($value, ... $arguments)
@@ -84,7 +90,7 @@ abstract class TypedTestCase extends TestCase
 
     /**
      * @param string $name
-     * @return callable
+     * @return array{class-string, string}
      */
-    abstract protected function formatCallback(string $name): callable;
+    abstract protected function formatCallback(string $name): array;
 }

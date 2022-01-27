@@ -17,6 +17,7 @@ class ErrorHandler
      * @template T
      * @param \Closure():T $callback
      * @return T
+     * @throws ErrorException
      */
     public static function handleCall(\Closure $callback): mixed
     {
@@ -29,6 +30,14 @@ class ErrorHandler
         }
     }
 
+    /**
+     * @param int $severity
+     * @param string $error
+     * @param string $filename
+     * @param int $line
+     * @return never
+     * @throws ErrorException
+     */
     public static function throwErrorException(int $severity, string $error, string $filename, int $line): never
     {
         throw new ErrorException($error, 0, $severity, $filename, $line);

@@ -7,7 +7,6 @@ namespace Violet\TypeKit\Type;
 use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantTrait;
-use Violet\TypeKit\TypeAs;
 use Violet\TypeKit\TypedTestCase;
 use Violet\TypeKit\TypeIs;
 
@@ -36,7 +35,7 @@ class ConditionalPlainTypesTest extends TypedTestCase
         TypeIs::instance([new CompliantClass()], CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): callable
+    protected function formatCallback(string $name): array
     {
         return [TypeIs::class, $name];
     }

@@ -45,7 +45,7 @@ class TypeAsPlainTypesTest extends TypedTestCase
         TypeAs::instance(new CompliantClass(), CompliantTrait::class);
     }
 
-    protected function formatCallback(string $name): callable
+    protected function formatCallback(string $name): array
     {
         return [TypeAs::class, $name];
     }

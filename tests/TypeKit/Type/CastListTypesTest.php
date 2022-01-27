@@ -6,9 +6,6 @@ namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypeCast;
 use Violet\TypeKit\Exception\TypeCastException;
-use Violet\TypeKit\Exception\InvalidClassException;
-use Violet\TypeKit\PhpUnit\CompliantClass;
-use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -62,18 +59,12 @@ class CastListTypesTest extends TypedTestCase
         $this->assertSame([$value], $callback([1 => $value]));
     }
 
-    public function testInstanceDoesNotAcceptTrait(): void
-    {
-        $this->expectException(InvalidClassException::class);
-        TypeCast::instanceList([new CompliantClass()], CompliantTrait::class);
-    }
-
     public function testWholeArrayIsReturned(): void
     {
         $this->assertSame([1, 2, 3], TypeCast::intList([0 => 1, 'foo' => 2, 3 => '3']));
     }
 
-    protected function formatCallback(string $name): callable
+    protected function formatCallback(string $name): array
     {
         return [TypeCast::class, sprintf('%sList', $name)];
     }

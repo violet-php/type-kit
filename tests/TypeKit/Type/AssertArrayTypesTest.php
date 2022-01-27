@@ -6,9 +6,6 @@ namespace Violet\TypeKit\Type;
 
 use Violet\TypeKit\TypeAssert;
 use Violet\TypeKit\Exception\TypeAssertException;
-use Violet\TypeKit\Exception\InvalidClassException;
-use Violet\TypeKit\PhpUnit\CompliantClass;
-use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -52,13 +49,7 @@ class AssertArrayTypesTest extends TypedTestCase
         $callback([$value]);
     }
 
-    public function testInstanceDoesNotAcceptTrait(): void
-    {
-        $this->expectException(InvalidClassException::class);
-        TypeAssert::instanceArray([new CompliantClass()], CompliantTrait::class);
-    }
-
-    protected function formatCallback(string $name): callable
+    protected function formatCallback(string $name): array
     {
         return [TypeAssert::class, sprintf('%sArray', $name)];
     }

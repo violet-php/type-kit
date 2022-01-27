@@ -11,5 +11,4 @@ namespace Violet\TypeKit\PhpStan;
  */
 class TypeAssertExtension
 {
-
 }

@@ -316,7 +316,9 @@ class TypeCast
      */
     public static function nullArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): mixed => self::null($x), $value, 'array<null>');
+        return TypeIs::nullArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): mixed => self::null($x), $value, 'array<null>');
     }
 
     /**
@@ -326,7 +328,9 @@ class TypeCast
      */
     public static function boolArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): bool => self::bool($x), $value, 'array<bool>');
+        return TypeIs::boolArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): bool => self::bool($x), $value, 'array<bool>');
     }
 
     /**
@@ -336,7 +340,9 @@ class TypeCast
      */
     public static function intArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): int => self::int($x), $value, 'array<int>');
+        return TypeIs::intArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): int => self::int($x), $value, 'array<int>');
     }
 
     /**
@@ -346,7 +352,9 @@ class TypeCast
      */
     public static function floatArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): float => self::float($x), $value, 'array<float>');
+        return TypeIs::floatArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): float => self::float($x), $value, 'array<float>');
     }
 
     /**
@@ -356,7 +364,9 @@ class TypeCast
      */
     public static function stringArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): string => self::string($x), $value, 'array<string>');
+        return TypeIs::stringArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): string => self::string($x), $value, 'array<string>');
     }
 
     /**
@@ -366,7 +376,9 @@ class TypeCast
      */
     public static function arrayArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): array => self::array($x), $value, 'array<array>');
+        return TypeIs::arrayArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): array => self::array($x), $value, 'array<array>');
     }
 
     /**
@@ -376,7 +388,9 @@ class TypeCast
      */
     public static function listArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): array => self::list($x), $value, 'array<list>');
+        return TypeIs::listArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): array => self::list($x), $value, 'array<list>');
     }
 
     /**
@@ -386,7 +400,9 @@ class TypeCast
      */
     public static function objectArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): object => self::object($x), $value, 'array<object>');
+        return TypeIs::objectArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): object => self::object($x), $value, 'array<object>');
     }
 
     /**
@@ -398,11 +414,9 @@ class TypeCast
      */
     public static function instanceArray(mixed $value, string $class): array
     {
-        if (!class_exists($class) && !interface_exists($class)) {
-            throw InvalidClassException::createFromName($class);
-        }
-
-        return self::castArray(static fn (mixed $x): object => self::instance($x, $class), $value, "array<$class>");
+        return TypeIs::instanceArray($value, $class)
+            ? $value
+            : self::castArray(static fn (mixed $x): object => self::instance($x, $class), $value, "array<$class>");
     }
 
     /**
@@ -412,7 +426,9 @@ class TypeCast
      */
     public static function iterableArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): iterable => self::iterable($x), $value, 'array<iterable>');
+        return TypeIs::iterableArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): iterable => self::iterable($x), $value, 'array<iterable>');
     }
 
     /**
@@ -422,7 +438,9 @@ class TypeCast
      */
     public static function resourceArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): mixed => self::resource($x), $value, 'array<resource>');
+        return TypeIs::resourceArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): mixed => self::resource($x), $value, 'array<resource>');
     }
 
     /**
@@ -432,7 +450,9 @@ class TypeCast
      */
     public static function callableArray(mixed $value): array
     {
-        return self::castArray(static fn (mixed $x): callable => self::callable($x), $value, 'array<callable>');
+        return TypeIs::callableArray($value)
+            ? $value
+            : self::castArray(static fn (mixed $x): callable => self::callable($x), $value, 'array<callable>');
     }
 
     /**
@@ -442,7 +462,9 @@ class TypeCast
      */
     public static function nullList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): mixed => self::null($x), $value, 'list<null>');
+        return TypeIs::nullList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): mixed => self::null($x), $value, 'list<null>');
     }
 
     /**
@@ -452,7 +474,9 @@ class TypeCast
      */
     public static function boolList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): bool => self::bool($x), $value, 'list<bool>');
+        return TypeIs::boolList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): bool => self::bool($x), $value, 'list<bool>');
     }
 
     /**
@@ -462,7 +486,9 @@ class TypeCast
      */
     public static function intList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): int => self::int($x), $value, 'list<int>');
+        return TypeIs::intList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): int => self::int($x), $value, 'list<int>');
     }
 
     /**
@@ -472,7 +498,9 @@ class TypeCast
      */
     public static function floatList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): float => self::float($x), $value, 'list<float>');
+        return TypeIs::floatList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): float => self::float($x), $value, 'list<float>');
     }
 
     /**
@@ -482,7 +510,9 @@ class TypeCast
      */
     public static function stringList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): string => self::string($x), $value, 'list<string>');
+        return TypeIs::stringList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): string => self::string($x), $value, 'list<string>');
     }
 
     /**
@@ -492,7 +522,9 @@ class TypeCast
      */
     public static function arrayList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): array => self::array($x), $value, 'list<array>');
+        return TypeIs::arrayList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): array => self::array($x), $value, 'list<array>');
     }
 
     /**
@@ -502,7 +534,9 @@ class TypeCast
      */
     public static function listList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): array => self::list($x), $value, 'list<list>');
+        return TypeIs::listList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): array => self::list($x), $value, 'list<list>');
     }
 
     /**
@@ -512,7 +546,9 @@ class TypeCast
      */
     public static function objectList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): object => self::object($x), $value, 'list<object>');
+        return TypeIs::objectList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): object => self::object($x), $value, 'list<object>');
     }
 
     /**
@@ -524,11 +560,9 @@ class TypeCast
      */
     public static function instanceList(mixed $value, string $class): array
     {
-        if (!class_exists($class) && !interface_exists($class)) {
-            throw InvalidClassException::createFromName($class);
-        }
-
-        return self::castList(static fn (mixed $x): object => self::instance($x, $class), $value, "list<$class>");
+        return TypeIs::instanceList($value, $class)
+            ? $value
+            : self::castList(static fn (mixed $x): object => self::instance($x, $class), $value, "list<$class>");
     }
 
     /**
@@ -538,7 +572,9 @@ class TypeCast
      */
     public static function iterableList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): iterable => self::iterable($x), $value, 'list<iterable>');
+        return TypeIs::iterableList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): iterable => self::iterable($x), $value, 'list<iterable>');
     }
 
     /**
@@ -548,7 +584,9 @@ class TypeCast
      */
     public static function resourceList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): mixed => self::resource($x), $value, 'list<resource>');
+        return TypeIs::resourceList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): mixed => self::resource($x), $value, 'list<resource>');
     }
 
     /**
@@ -558,7 +596,9 @@ class TypeCast
      */
     public static function callableList(mixed $value): array
     {
-        return self::castList(static fn (mixed $x): callable => self::callable($x), $value, 'list<callable>');
+        return TypeIs::callableList($value)
+            ? $value
+            : self::castList(static fn (mixed $x): callable => self::callable($x), $value, 'list<callable>');
     }
 
     /**
@@ -571,14 +611,7 @@ class TypeCast
     private static function castArray(\Closure $cast, mixed $value, string $expectedType): array
     {
         try {
-            $result = self::array($value);
-
-            /** @var mixed $item */
-            foreach ($result as $key => $item) {
-                $result[$key] = $cast($item);
-            }
-
-            return $result;
+            return array_map($cast, self::array($value));
         } catch (\Throwable $exception) {
             throw TypeCastException::createFromFailure($value, $expectedType, $exception);
         }

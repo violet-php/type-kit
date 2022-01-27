@@ -11,9 +11,9 @@ use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierAwareExtension;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type;
 use PHPStan\Type\StaticMethodTypeSpecifyingExtension;
-use PHPStan\Type\TypeCombinator;
 use Violet\TypeKit;
 
 /**
@@ -32,7 +32,7 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
 
     public function getClass(): string
     {
-        return TypeKit\TypeAs::class;
+        return TypeKit\TypeIs::class;
     }
 
     public function isStaticMethodSupported(
@@ -40,9 +40,7 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
         StaticCall $node,
         TypeSpecifierContext $context
     ): bool {
-        return str_starts_with($staticMethodReflection->getName(), 'is')
-            && !$context->null()
-            && isset($node->getArgs()[0]);
+        return self::isTypeMethod(strtolower($staticMethodReflection->getName())) && !$context->null();
     }
 
     public function specifyTypes(
@@ -51,30 +49,34 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
         Scope $scope,
         TypeSpecifierContext $context
     ): SpecifiedTypes {
-        $expression = $node->getArgs()[0]->value;
-        $typeBefore = $scope->getType($expression);
-        $typeName = lcfirst(substr($staticMethodReflection->getName(), 2));
+        if ($this->typeSpecifier === null || $context->null()) {
+            throw new ShouldNotHappenException();
+        }
+
+        if (!isset($node->getArgs()[0])) {
+            return new SpecifiedTypes();
+        }
 
         $classType = isset($node->getArgs()[1]) ? $scope->getType($node->getArgs()[1]->value) : null;
         $class = $classType instanceof Type\Constant\ConstantStringType ? $classType->getValue() : null;
 
-        $type = TypeCombinator::intersect($typeBefore, self::getMethodType($typeName, $class));
-
-        return $this->typeSpecifier->create($expression, $type, TypeSpecifierContext::createTruthy());
+        return $this->typeSpecifier->create(
+            $node->getArgs()[0]->value,
+            self::getMethodType(strtolower($staticMethodReflection->getName()), $class),
+            $context,
+            \false,
+            $scope
+        );
     }
 
     public static function getMethodType(string $type, ?string $class = null): Type\Type
     {
-        if (str_ends_with($type, 'Array')) {
+        if ($type !== 'array' && str_ends_with($type, 'array')) {
             return new Type\ArrayType(new Type\MixedType(), self::getMethodType(substr($type, 0, -5), $class));
         }
 
-        if (str_ends_with($type, 'List')) {
+        if ($type !== 'list' && str_ends_with($type, 'list')) {
             return new Type\ArrayType(new Type\IntegerType(), self::getMethodType(substr($type, 0, -4), $class));
-        }
-
-        if ($type === 'instance' && $class === null) {
-            return new Type\ObjectWithoutClassType();
         }
 
         return match ($type) {
@@ -86,10 +88,35 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
             'array' => new Type\ArrayType(new Type\MixedType(), new Type\MixedType()),
             'list' => new Type\ArrayType(new Type\IntegerType(), new Type\MixedType()),
             'object' => new Type\ObjectWithoutClassType(),
-            'instance' => new Type\ObjectType($class),
+            'instance' => $class === null ? new Type\ObjectWithoutClassType() : new Type\ObjectType($class),
             'iterable' => new Type\IterableType(new Type\MixedType(), new Type\MixedType()),
             'resource' => new Type\ResourceType(),
             'callable' => new Type\CallableType(),
+            default => throw new ShouldNotHappenException("Unexpected type name '$type'"),
         };
+    }
+
+    public static function isTypeMethod(string $name): bool
+    {
+        if ($name !== 'array' && str_ends_with($name, 'array')) {
+            $name = substr($name, 0, -5);
+        } elseif ($name !== 'list' && str_ends_with($name, 'list')) {
+            $name = substr($name, 0, -4);
+        }
+
+        return \in_array($name, [
+            'null',
+            'bool',
+            'int',
+            'float',
+            'string',
+            'array',
+            'list',
+            'object',
+            'instance',
+            'iterable',
+            'resource',
+            'callable'
+        ], true);
     }
 }
