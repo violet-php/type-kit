@@ -71,8 +71,14 @@ class Debug
      */
     private static function shouldIgnoreFrame(StackFrame $frame, array $ignoredClasses): bool
     {
-        foreach ($ignoredClasses as $class) {
-            if (is_a($frame->class, $class, true)) {
+        $class = $frame->class;
+
+        if ($class === null) {
+            return false;
+        }
+
+        foreach ($ignoredClasses as $ignoredClass) {
+            if (is_a($class, $ignoredClass, true)) {
                 return true;
             }
         }

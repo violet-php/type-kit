@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\PhpStan;
 
-use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
@@ -37,7 +37,7 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
 
     public function isStaticMethodSupported(
         MethodReflection $staticMethodReflection,
-        StaticCall $node,
+        Node\Expr\StaticCall $node,
         TypeSpecifierContext $context
     ): bool {
         return self::isTypeMethod(strtolower($staticMethodReflection->getName())) && !$context->null();
@@ -45,7 +45,7 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
 
     public function specifyTypes(
         MethodReflection $staticMethodReflection,
-        StaticCall $node,
+        Node\Expr\StaticCall $node,
         Scope $scope,
         TypeSpecifierContext $context
     ): SpecifiedTypes {
@@ -57,26 +57,29 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
             return new SpecifiedTypes();
         }
 
-        $classType = isset($node->getArgs()[1]) ? $scope->getType($node->getArgs()[1]->value) : null;
-        $class = $classType instanceof Type\Constant\ConstantStringType ? $classType->getValue() : null;
-
-        return $this->typeSpecifier->create(
-            $node->getArgs()[0]->value,
-            self::getMethodType(strtolower($staticMethodReflection->getName()), $class),
-            $context,
-            \false,
-            $scope
+        $type = self::getMethodType(
+            strtolower($staticMethodReflection->getName()),
+            $scope,
+            isset($node->getArgs()[1]) ? $node->getArgs()[1]->value : null
         );
+
+        return $this->typeSpecifier->create($node->getArgs()[0]->value, $type, $context, \false, $scope);
     }
 
-    public static function getMethodType(string $type, ?string $class = null): Type\Type
+    public static function getMethodType(string $type, Scope $scope, ?Node\Expr $class = null): Type\Type
     {
         if ($type !== 'array' && str_ends_with($type, 'array')) {
-            return new Type\ArrayType(new Type\MixedType(), self::getMethodType(substr($type, 0, -5), $class));
+            return new Type\ArrayType(
+                new Type\MixedType(),
+                self::getMethodType(substr($type, 0, -5), $scope, $class)
+            );
         }
 
         if ($type !== 'list' && str_ends_with($type, 'list')) {
-            return new Type\ArrayType(new Type\IntegerType(), self::getMethodType(substr($type, 0, -4), $class));
+            return new Type\ArrayType(
+                new Type\IntegerType(),
+                self::getMethodType(substr($type, 0, -4), $scope, $class)
+            );
         }
 
         return match ($type) {
@@ -88,12 +91,36 @@ class TypeExtension implements StaticMethodTypeSpecifyingExtension, TypeSpecifie
             'array' => new Type\ArrayType(new Type\MixedType(), new Type\MixedType()),
             'list' => new Type\ArrayType(new Type\IntegerType(), new Type\MixedType()),
             'object' => new Type\ObjectWithoutClassType(),
-            'instance' => $class === null ? new Type\ObjectWithoutClassType() : new Type\ObjectType($class),
+            'instance' => $class === null ? new Type\ObjectWithoutClassType() : self::getInstanceType($class, $scope),
             'iterable' => new Type\IterableType(new Type\MixedType(), new Type\MixedType()),
             'resource' => new Type\ResourceType(),
             'callable' => new Type\CallableType(),
             default => throw new ShouldNotHappenException("Unexpected type name '$type'"),
         };
+    }
+
+    private static function getInstanceType(Node\Expr $classNameExpression, Scope $scope): Type\Type
+    {
+        $classNameType = $scope->getType($classNameExpression);
+
+        if (
+            $classNameExpression instanceof Node\Expr\ClassConstFetch &&
+            $classNameExpression->class instanceof Node\Name &&
+            $classNameExpression->name instanceof Node\Identifier &&
+            \strtolower($classNameExpression->name->name) === 'class'
+        ) {
+            return $scope->resolveTypeByName($classNameExpression->class);
+        }
+
+        if ($classNameType instanceof Type\Constant\ConstantStringType) {
+            return new Type\ObjectType($classNameType->getValue());
+        }
+
+        if ($classNameType instanceof Type\Generic\GenericClassStringType) {
+            return $classNameType->getGenericType();
+        }
+
+        return new Type\ObjectWithoutClassType();
     }
 
     public static function isTypeMethod(string $name): bool
