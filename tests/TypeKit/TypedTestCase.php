@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Violet\TypeKit;
 
 use PHPUnit\Framework\TestCase;
+use Violet\TypeKit\Exception\InvalidClassException;
 use Violet\TypeKit\PhpUnit\AbstractCompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantInterface;
+use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\PhpUnit\NonCompliantClass;
 
 /**
@@ -66,6 +68,13 @@ abstract class TypedTestCase extends TestCase
             [$this->makeCall('resource'), null, 'resource'],
             [$this->makeCall('callable'), null, 'callable'],
         ];
+    }
+
+    public function testInstanceDoesNotAcceptTrait(): void
+    {
+        $callback = $this->makeCall('instance', [CompliantTrait::class]);
+        $this->expectException(InvalidClassException::class);
+        $callback(null);
     }
 
     /**

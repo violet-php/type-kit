@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
-use Violet\TypeKit\Exception\InvalidClassException;
-use Violet\TypeKit\PhpUnit\CompliantClass;
-use Violet\TypeKit\PhpUnit\CompliantTrait;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -38,12 +35,6 @@ class ConditionalArrayTypesTest extends TypedTestCase
     public function testInvalidItemValues(\Closure $callback, mixed $value): void
     {
         $this->assertFalse($callback([$value]));
-    }
-
-    public function testInstanceDoesNotAcceptTrait(): void
-    {
-        $this->expectException(InvalidClassException::class);
-        TypeIs::instanceArray([new CompliantClass()], CompliantTrait::class);
     }
 
     protected function formatCallback(string $name): array

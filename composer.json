@@ -2,8 +2,8 @@
     "require-dev": {
         "ergebnis/composer-normalize": "^2.23.0",
         "friendsofphp/php-cs-fixer": "^v3.5.0",
-        "infection/infection": "^0.26.3",
-        "phpstan/phpstan": "^1.4.2",
+        "infection/infection": "^0.26.4",
+        "phpstan/phpstan": "^1.4.3",
         "phpstan/phpstan-phpunit": "^1.0.0",
         "phpunit/phpunit": "^9.5.13",
         "roave/security-advisories": "dev-latest",
