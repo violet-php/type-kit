@@ -10,6 +10,10 @@ includes:
 
 services:
 	-
-		class: Violet\TypeKit\PhpStan\TypeExtension
+		class: Violet\TypeKit\PhpStan\TypeIsExtension
+		tags:
+			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension
+	-
+		class: Violet\TypeKit\PhpStan\TypeAssertExtension
 		tags:
 			- phpstan.typeSpecifier.staticMethodTypeSpecifyingExtension

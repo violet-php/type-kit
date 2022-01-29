@@ -9,20 +9,20 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\StaticMethodTypeSpecifyingExtension;
-use PHPStan\Type\TypeCombinator;
-use Violet\TypeKit\Type\TypeAssert;
+use Violet\TypeKit\Type\TypeIs;
 
 /**
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class TypeAssertExtension extends AbstractTypeExtension implements StaticMethodTypeSpecifyingExtension
+class TypeIsExtension extends AbstractTypeExtension implements StaticMethodTypeSpecifyingExtension
 {
     public function getClass(): string
     {
-        return TypeAssert::class;
+        return TypeIs::class;
     }
 
     public function isStaticMethodSupported(
@@ -30,9 +30,7 @@ class TypeAssertExtension extends AbstractTypeExtension implements StaticMethodT
         StaticCall $node,
         TypeSpecifierContext $context
     ): bool {
-        return $this->isTypeMethod(strtolower($staticMethodReflection->getName()))
-            && $context->null()
-            && isset($node->getArgs()[0]);
+        return $this->isTypeMethod(strtolower($staticMethodReflection->getName())) && !$context->null();
     }
 
     public function specifyTypes(
@@ -41,16 +39,20 @@ class TypeAssertExtension extends AbstractTypeExtension implements StaticMethodT
         Scope $scope,
         TypeSpecifierContext $context
     ): SpecifiedTypes {
-        $assertedType = $this->getMethodType(
+        if ($this->typeSpecifier === null || $context->null()) {
+            throw new ShouldNotHappenException();
+        }
+
+        if (!isset($node->getArgs()[0])) {
+            return new SpecifiedTypes();
+        }
+
+        $type = $this->getMethodType(
             strtolower($staticMethodReflection->getName()),
             $scope,
             isset($node->getArgs()[1]) ? $node->getArgs()[1]->value : null
         );
 
-        $expression = $node->getArgs()[0]->value;
-        $typeBefore = $scope->getType($expression);
-        $type = TypeCombinator::intersect($typeBefore, $assertedType);
-
-        return $this->typeSpecifier->create($expression, $type, TypeSpecifierContext::createTruthy());
+        return $this->typeSpecifier->create($node->getArgs()[0]->value, $type, $context, \false, $scope);
     }
 }
