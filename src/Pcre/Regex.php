@@ -22,7 +22,7 @@ class Regex
     public function __construct(string $regex)
     {
         $this->regex = $regex;
-        $this->call(fn () => preg_match($this->regex, ''));
+        $this->call(fn() => preg_match($this->regex, ''));
     }
 
     /**
@@ -92,12 +92,12 @@ class Regex
 
     public function matches(string $subject, int $offset = 0): bool
     {
-        return $this->call(fn () => preg_match($this->regex, $subject, offset: $offset)) === 1;
+        return $this->call(fn() => preg_match($this->regex, $subject, offset: $offset)) === 1;
     }
 
     public function replace(string $replacement, string $subject, int $limit = self::NO_LIMIT): string
     {
-        return TypeAs::string($this->call(fn () => preg_replace($this->regex, $replacement, $subject, $limit)));
+        return TypeAs::string($this->call(fn() => preg_replace($this->regex, $replacement, $subject, $limit)));
     }
 
     /**
@@ -108,7 +108,7 @@ class Regex
      */
     public function replaceCallback(\Closure $callback, string $subject, int $limit = self::NO_LIMIT): string
     {
-        return TypeAs::string($this->call(fn () => preg_replace_callback($this->regex, $callback, $subject, $limit)));
+        return TypeAs::string($this->call(fn() => preg_replace_callback($this->regex, $callback, $subject, $limit)));
     }
 
     /**
@@ -118,7 +118,7 @@ class Regex
      */
     public function split(string $subject, int $limit = self::NO_LIMIT): array
     {
-        return TypeAs::stringList($this->call(fn () => preg_split($this->regex, $subject, $limit)));
+        return TypeAs::stringList($this->call(fn() => preg_split($this->regex, $subject, $limit)));
     }
 
     /**
@@ -127,7 +127,7 @@ class Regex
      */
     public function grep(array $subjects): array
     {
-        return TypeAs::stringArray($this->call(fn () => preg_grep($this->regex, $subjects)));
+        return TypeAs::stringArray($this->call(fn() => preg_grep($this->regex, $subjects)));
     }
 
     /**
@@ -136,7 +136,7 @@ class Regex
      */
     public function reject(array $subjects): array
     {
-        return TypeAs::stringArray($this->call(fn () => preg_grep($this->regex, $subjects, PREG_GREP_INVERT)));
+        return TypeAs::stringArray($this->call(fn() => preg_grep($this->regex, $subjects, PREG_GREP_INVERT)));
     }
 
     /**

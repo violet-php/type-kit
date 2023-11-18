@@ -19,12 +19,12 @@ class ErrorHandlerTest extends TestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('Test Error');
 
-        ErrorHandler::handleCall(static fn () => trigger_error('Test Error', E_USER_NOTICE));
+        ErrorHandler::handleCall(static fn() => trigger_error('Test Error', E_USER_NOTICE));
     }
 
     public function testHandlingCallReturnValue(): void
     {
-        $this->assertSame(123, ErrorHandler::handleCall(static fn () => 123));
+        $this->assertSame(123, ErrorHandler::handleCall(static fn() => 123));
     }
 
     public function testThrowingError(): void

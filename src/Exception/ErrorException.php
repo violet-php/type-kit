@@ -9,6 +9,4 @@ namespace Violet\TypeKit\Exception;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class ErrorException extends \ErrorException implements TypeKitException
-{
-}
+class ErrorException extends \ErrorException implements TypeKitException {}

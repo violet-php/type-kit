@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\PhpUnit\AbstractCompliantClass;
 use Violet\TypeKit\PhpUnit\CompliantClass;
@@ -70,28 +71,28 @@ class CastPlainTypesTest extends TypedTestCase
     public function testPrecisionLostFloat(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Casting caused a loss of precision');
+        $this->expectExceptionMessage('Casting caused a loss of precision');
         TypeCast::int(1.1);
     }
 
     public function testPrecisionLostStringFloat(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Casting caused a loss of precision');
+        $this->expectExceptionMessage('Casting caused a loss of precision');
         TypeCast::int('1.1');
     }
 
     public function testNonNumericIntString(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Not a numeric string');
+        $this->expectExceptionMessage('Not a numeric string');
         TypeCast::int('foobar');
     }
 
     public function testInvalidIntType(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to int');
+        $this->expectExceptionMessage('Type cannot be cast to int');
         TypeCast::int([]);
     }
 
@@ -111,28 +112,28 @@ class CastPlainTypesTest extends TypedTestCase
     public function testPrecisionLostInt(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Casting caused a loss of precision');
+        $this->expectExceptionMessage('Casting caused a loss of precision');
         TypeCast::float(9223372036854774807);
     }
 
     public function testPrecisionLostStringInt(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Casting caused a loss of precision');
+        $this->expectExceptionMessage('Casting caused a loss of precision');
         TypeCast::float('9223372036854774807');
     }
 
     public function testNonNumericStringFloat(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Not a numeric string');
+        $this->expectExceptionMessage('Not a numeric string');
         TypeCast::float('foobar');
     }
 
     public function testInvalidFloatType(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to float');
+        $this->expectExceptionMessage('Type cannot be cast to float');
         TypeCast::float([]);
     }
 
@@ -150,14 +151,14 @@ class CastPlainTypesTest extends TypedTestCase
     public function testObjectWithoutToString(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Cannot cast an object without __toString() method to string');
+        $this->expectExceptionMessage('Cannot cast an object without __toString() method to string');
         TypeCast::string(new \stdClass());
     }
 
     public function testInvalidStringType(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to string');
+        $this->expectExceptionMessage('Type cannot be cast to string');
         TypeCast::string([]);
     }
 
@@ -171,7 +172,7 @@ class CastPlainTypesTest extends TypedTestCase
     public function testInvalidArrayType(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to array');
+        $this->expectExceptionMessage('Type cannot be cast to array');
         TypeCast::array('');
     }
 
@@ -208,14 +209,14 @@ class CastPlainTypesTest extends TypedTestCase
 
         $casted = TypeCast::object(['foo' => 'bar']);
         $this->assertInstanceOf(\stdClass::class, $casted);
-        $this->assertObjectHasAttribute('foo', $casted);
+        $this->assertObjectHasProperty('foo', $casted);
         $this->assertSame('bar', $casted->foo);
     }
 
     public function testInvalidObjectType(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to object');
+        $this->expectExceptionMessage('Type cannot be cast to object');
         TypeCast::object('');
     }
 
@@ -244,7 +245,7 @@ class CastPlainTypesTest extends TypedTestCase
     public function testInvalidIterableValue(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to iterable');
+        $this->expectExceptionMessage('Type cannot be cast to iterable');
         TypeCast::iterable(new \stdClass());
     }
 
@@ -257,7 +258,7 @@ class CastPlainTypesTest extends TypedTestCase
     public function testInvalidResourceValue(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to resource');
+        $this->expectExceptionMessage('Type cannot be cast to resource');
         TypeCast::resource('');
     }
 
@@ -269,17 +270,17 @@ class CastPlainTypesTest extends TypedTestCase
     public function testInvalidCallableValue(): void
     {
         $this->expectException(TypeCastException::class);
-        $this->expectErrorMessage('Type cannot be cast to callable');
+        $this->expectExceptionMessage('Type cannot be cast to callable');
         TypeCast::callable('');
     }
 
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValues(\Closure $callback, mixed $value): void
     {
         $this->assertSame($value, $callback($value));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         try {
@@ -295,7 +296,7 @@ class CastPlainTypesTest extends TypedTestCase
         }
     }
 
-    protected function formatCallback(string $name): array
+    protected static function formatCallback(string $name): array
     {
         return [TypeCast::class, $name];
     }

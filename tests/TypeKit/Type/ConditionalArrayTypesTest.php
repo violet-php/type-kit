@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Violet\TypeKit\TypedTestCase;
 
 /**
@@ -13,31 +14,31 @@ use Violet\TypeKit\TypedTestCase;
  */
 class ConditionalArrayTypesTest extends TypedTestCase
 {
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValues(\Closure $callback, mixed $value): void
     {
         $this->assertTrue($callback([$value]));
     }
 
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValuesMap(\Closure $callback, mixed $value): void
     {
         $this->assertTrue($callback(['foobar' => $value]));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidValues(\Closure $callback, mixed $value): void
     {
         $this->assertFalse($callback($value));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidItemValues(\Closure $callback, mixed $value): void
     {
         $this->assertFalse($callback([$value]));
     }
 
-    protected function formatCallback(string $name): array
+    protected static function formatCallback(string $name): array
     {
         return [TypeIs::class, sprintf('%sArray', $name)];
     }

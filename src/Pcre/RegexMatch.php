@@ -15,8 +15,7 @@ class RegexMatch
         public readonly int|string $name,
         public readonly string $value,
         public readonly int $offset
-    ) {
-    }
+    ) {}
 
     public function __toString(): string
     {

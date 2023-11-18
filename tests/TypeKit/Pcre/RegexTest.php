@@ -151,13 +151,13 @@ class RegexTest extends TestCase
     public function testReplaceCallback(): void
     {
         $regex = new Regex('/foo/');
-        $this->assertSame('barfoobarfoo', $regex->replaceCallback(fn ($match) => "bar$match[0]", 'foofoo'));
+        $this->assertSame('barfoobarfoo', $regex->replaceCallback(fn($match) => "bar$match[0]", 'foofoo'));
     }
 
     public function testReplaceCallbackLimit(): void
     {
         $regex = new Regex('/foo/');
-        $this->assertSame('barfoofoo', $regex->replaceCallback(fn ($match) => "bar$match[0]", 'foofoo', 1));
+        $this->assertSame('barfoofoo', $regex->replaceCallback(fn($match) => "bar$match[0]", 'foofoo', 1));
     }
 
     public function testSplit(): void

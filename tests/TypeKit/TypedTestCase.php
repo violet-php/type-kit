@@ -22,78 +22,78 @@ abstract class TypedTestCase extends TestCase
     /**
      * @return array<array{\Closure, mixed}>
      */
-    public function getValidValuesTestCases(): array
+    public static function getValidValuesTestCases(): array
     {
         return [
-            [$this->makeCall('null'), null],
-            [$this->makeCall('bool'), true],
-            [$this->makeCall('int'), 1],
-            [$this->makeCall('float'), 1.1],
-            [$this->makeCall('string'), 'foobar'],
-            [$this->makeCall('array'), []],
-            [$this->makeCall('array'), [1]],
-            [$this->makeCall('array'), [1, 2, 3]],
-            [$this->makeCall('array'), ['foo' => 'bar']],
-            [$this->makeCall('list'), []],
-            [$this->makeCall('list'), [1]],
-            [$this->makeCall('list'), [1, 2, 3]],
-            [$this->makeCall('object'), new CompliantClass()],
-            [$this->makeCall('instance', [CompliantClass::class]), new CompliantClass()],
-            [$this->makeCall('instance', [AbstractCompliantClass::class]), new CompliantClass()],
-            [$this->makeCall('instance', [CompliantInterface::class]), new CompliantClass()],
-            [$this->makeCall('iterable'), [1]],
-            [$this->makeCall('resource'), tmpfile()],
-            [$this->makeCall('callable'), 'strlen'],
+            [self::makeCall('null'), null],
+            [self::makeCall('bool'), true],
+            [self::makeCall('int'), 1],
+            [self::makeCall('float'), 1.1],
+            [self::makeCall('string'), 'foobar'],
+            [self::makeCall('array'), []],
+            [self::makeCall('array'), [1]],
+            [self::makeCall('array'), [1, 2, 3]],
+            [self::makeCall('array'), ['foo' => 'bar']],
+            [self::makeCall('list'), []],
+            [self::makeCall('list'), [1]],
+            [self::makeCall('list'), [1, 2, 3]],
+            [self::makeCall('object'), new CompliantClass()],
+            [self::makeCall('instance', [CompliantClass::class]), new CompliantClass()],
+            [self::makeCall('instance', [AbstractCompliantClass::class]), new CompliantClass()],
+            [self::makeCall('instance', [CompliantInterface::class]), new CompliantClass()],
+            [self::makeCall('iterable'), [1]],
+            [self::makeCall('resource'), tmpfile()],
+            [self::makeCall('callable'), 'strlen'],
         ];
     }
 
     /**
      * @return array<array{\Closure, mixed, string}>
      */
-    public function getInvalidValuesTestCases(): array
+    public static function getInvalidValuesTestCases(): array
     {
         return [
-            [$this->makeCall('null'), true, 'null'],
-            [$this->makeCall('bool'), null, 'bool'],
-            [$this->makeCall('int'), null, 'int'],
-            [$this->makeCall('float'), null, 'float'],
-            [$this->makeCall('string'), null, 'string'],
-            [$this->makeCall('array'), null, 'array'],
-            [$this->makeCall('list'), null, 'list'],
-            [$this->makeCall('list'), ['foo' => 'bar'], 'list'],
-            [$this->makeCall('object'), null, 'object'],
-            [$this->makeCall('instance', [CompliantClass::class]), null, CompliantClass::class],
-            [$this->makeCall('instance', [CompliantClass::class]), new NonCompliantClass(), CompliantClass::class],
-            [$this->makeCall('iterable'), null, 'iterable'],
-            [$this->makeCall('resource'), null, 'resource'],
-            [$this->makeCall('callable'), null, 'callable'],
+            [self::makeCall('null'), true, 'null'],
+            [self::makeCall('bool'), null, 'bool'],
+            [self::makeCall('int'), null, 'int'],
+            [self::makeCall('float'), null, 'float'],
+            [self::makeCall('string'), null, 'string'],
+            [self::makeCall('array'), null, 'array'],
+            [self::makeCall('list'), null, 'list'],
+            [self::makeCall('list'), ['foo' => 'bar'], 'list'],
+            [self::makeCall('object'), null, 'object'],
+            [self::makeCall('instance', [CompliantClass::class]), null, CompliantClass::class],
+            [self::makeCall('instance', [CompliantClass::class]), new NonCompliantClass(), CompliantClass::class],
+            [self::makeCall('iterable'), null, 'iterable'],
+            [self::makeCall('resource'), null, 'resource'],
+            [self::makeCall('callable'), null, 'callable'],
         ];
     }
 
     public function testInstanceDoesNotAcceptTrait(): void
     {
-        $callback = $this->makeCall('instance', [CompliantTrait::class]);
+        $callback = self::makeCall('instance', [CompliantTrait::class]);
         $this->expectException(InvalidClassException::class);
         $callback(null);
     }
 
     /**
      * @param string $type
-     * @param array<mixed> $arguments
+     * @param array<int, mixed> $arguments
      * @return \Closure
      */
-    private function makeCall(string $type, array $arguments = []): \Closure
+    private static function makeCall(string $type, array $arguments = []): \Closure
     {
-        $callback = $this->formatCallback($type);
+        $callback = static::formatCallback($type);
 
         if (!\is_callable($callback)) {
-            $this->fail('Got unexpected return value from formatCallback()');
+            throw new \UnexpectedValueException('Got unexpected return value from formatCallback()');
         }
 
-        $callback = \Closure::fromCallable($callback);
+        $callback = $callback(...);
 
         return \count($arguments) > 0
-            ? static fn (mixed $value): mixed => $callback($value, ... $arguments)
+            ? static fn(mixed $value): mixed => $callback($value, ...$arguments)
             : $callback;
     }
 
@@ -101,5 +101,5 @@ abstract class TypedTestCase extends TestCase
      * @param string $name
      * @return array{class-string, string}
      */
-    abstract protected function formatCallback(string $name): array;
+    abstract protected static function formatCallback(string $name): array;
 }

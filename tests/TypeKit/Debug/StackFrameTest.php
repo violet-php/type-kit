@@ -153,7 +153,7 @@ class StackFrameTest extends TestCase
     {
         return array_values(array_filter(
             $trace,
-            static fn (StackFrame $trace) => !\in_array($trace->function, self::INCLUDE_FUNCTIONS, true)
+            static fn(StackFrame $trace) => !\in_array($trace->function, self::INCLUDE_FUNCTIONS, true)
         ));
     }
 }

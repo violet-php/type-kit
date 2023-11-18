@@ -38,7 +38,7 @@ class Debug
             ($includeObject ? DEBUG_BACKTRACE_PROVIDE_OBJECT : 0);
 
         return array_map(
-            static fn (array $entry) => new StackFrame($entry),
+            static fn(array $entry) => new StackFrame($entry),
             debug_backtrace($callOptions, $depth)
         );
     }

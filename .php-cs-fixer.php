@@ -6,8 +6,6 @@ $finder = \PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setCacheFile(__DIR__ . '/build/.php-cs-fixer.cache')
     ->setRules([
-        '@PSR12' => true,
-        'no_unused_imports' => true,
-        'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
+        '@PER-CS' => true,
     ])
     ->setFinder($finder);

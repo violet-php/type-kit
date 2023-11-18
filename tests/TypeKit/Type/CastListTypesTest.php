@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Violet\TypeKit\Exception\TypeCastException;
 use Violet\TypeKit\TypedTestCase;
 
@@ -14,13 +15,13 @@ use Violet\TypeKit\TypedTestCase;
  */
 class CastListTypesTest extends TypedTestCase
 {
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValues(\Closure $callback, mixed $value): void
     {
         $this->assertSame([$value], $callback([$value]));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         try {
@@ -36,7 +37,7 @@ class CastListTypesTest extends TypedTestCase
         }
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidItemValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         try {
@@ -52,7 +53,7 @@ class CastListTypesTest extends TypedTestCase
         }
     }
 
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidNonListValues(\Closure $callback, mixed $value): void
     {
         $this->assertSame([$value], $callback([1 => $value]));
@@ -63,7 +64,7 @@ class CastListTypesTest extends TypedTestCase
         $this->assertSame([1, 2, 3], TypeCast::intList([0 => 1, 'foo' => 2, 3 => '3']));
     }
 
-    protected function formatCallback(string $name): array
+    protected static function formatCallback(string $name): array
     {
         return [TypeCast::class, sprintf('%sList', $name)];
     }

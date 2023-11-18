@@ -9,6 +9,4 @@ namespace Violet\TypeKit\PhpUnit;
  * @copyright Copyright (c) 2022 Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-abstract class AbstractCompliantClass
-{
-}
+abstract class AbstractCompliantClass {}

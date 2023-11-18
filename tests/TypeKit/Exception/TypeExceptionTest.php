@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Exception;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Violet\TypeKit\Type\TypeAs;
 
@@ -47,7 +48,7 @@ class TypeExceptionTest extends TestCase
         }
     }
 
-    /** @dataProvider getTypeNameTestCases */
+    #[DataProvider('typeNameProvider')]
     public function testTypeName(mixed $value, string $type): void
     {
         $exception = TypeException::createFromValue($value, $type);
@@ -59,7 +60,7 @@ class TypeExceptionTest extends TestCase
     /**
      * @return array<array{mixed, string}>
      */
-    public function getTypeNameTestCases(): array
+    public static function typeNameProvider(): array
     {
         return [
             [null, 'null'],

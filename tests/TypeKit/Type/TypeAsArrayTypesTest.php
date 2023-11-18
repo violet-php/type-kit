@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Violet\TypeKit\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Violet\TypeKit\Exception\TypeException;
 use Violet\TypeKit\TypedTestCase;
 
@@ -14,19 +15,19 @@ use Violet\TypeKit\TypedTestCase;
  */
 class TypeAsArrayTypesTest extends TypedTestCase
 {
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValues(\Closure $callback, mixed $value): void
     {
         $this->assertSame([$value, $value], $callback([$value, $value]));
     }
 
-    /** @dataProvider getValidValuesTestCases */
+    #[DataProvider('getValidValuesTestCases')]
     public function testValidValuesMap(\Closure $callback, mixed $value): void
     {
         $this->assertSame(['foobar' => $value], $callback(['foobar' => $value]));
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidValues(\Closure $callback, mixed $value, string $expectedType): void
     {
         $pattern = sprintf(
@@ -41,14 +42,14 @@ class TypeAsArrayTypesTest extends TypedTestCase
         $callback($value);
     }
 
-    /** @dataProvider getInvalidValuesTestCases */
+    #[DataProvider('getInvalidValuesTestCases')]
     public function testInvalidItemValues(\Closure $callback, mixed $value): void
     {
         $this->expectException(TypeException::class);
         $callback([$value]);
     }
 
-    protected function formatCallback(string $name): array
+    protected static function formatCallback(string $name): array
     {
         return [TypeAs::class, sprintf('%sArray', $name)];
     }
